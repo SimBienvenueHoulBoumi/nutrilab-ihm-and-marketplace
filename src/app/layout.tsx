@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import MyHeader from "@/components/myHeader";
+import MyHeader from "@/components/myHeader.components";
 
 export const metadata: Metadata = {
   title: "nutrilab",

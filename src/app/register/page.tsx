@@ -41,8 +41,11 @@ function Register() {
                             className="flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2">
                             register
                         </button>
-                        <div>
-                            <p className="text-center text-gray-500">Already have an account? <Link href="/login" className="text-[#20847D]">Login</Link></p>
+                        <div className="text-center text-gray-500">
+                            Already have an account?
+                            <Link href="/login">
+                                <div className='hover:underline hover:text-[#20847D]'>Login</div>
+                            </Link>
                         </div>
                     </form>
                 </div>
