@@ -1,5 +1,13 @@
+"use client"
+
+import MyBanner from "@/components/myBanner.components"
+
 export default function Home() {
   return (
-   <>main tyu</>
+    <>
+      <div className="m-auto">
+        <MyBanner />
+      </div>
+    </>
   );
 }

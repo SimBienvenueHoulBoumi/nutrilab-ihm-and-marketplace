@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
@@ -13,7 +15,7 @@ export default function MyHeader() {
                     alt="logo" />
                 <p className="py-4 font-bold uppercase">nutrilab</p>
             </div>
-            <div className="space-x-4 py-4 mx-2 flex flex-row text-[15px] capitalize">
+            <div className="space-x-4 py-4 mx-2 flex flex-row text-white text-[15px] capitalize">
                 <div>
                     <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/" >Home</Link>
                 </div>
