@@ -6,7 +6,7 @@ import React from 'react'
 function Register() {
 
     return (
-        <div className="h-[80vh] flex items-center justify-center px-4 py-auto sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center px-4 py-auto sm:px-6 lg:px-8">
             <div className="w-full space-y-8">
                 <div className="bg-white m-auto w-4/12 shadow-md rounded-md p-6">
                     <h2 className="my-3 text-center text-3xl font-bold tracking-tight text-gray-900">

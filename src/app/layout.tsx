@@ -3,14 +3,13 @@ import { Inter } from "next/font/google";
 
 import "./globals.css";
 import MyHeader from "@/components/myHeader.components";
-const inter = Inter({ subsets: ["latin"] });
 
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "nutrilab",
   description: "nutrilab website interface",
 };
-
 
 export default function RootLayout({
   children,
@@ -18,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="h-full">
-      <body className={`flex flex-col min-h-screen ${inter.className}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`flex flex-col ${inter.className}`}>
 
         <div className="bg-[#DFAF2C] w-full flex justify-between">
           <MyHeader />
@@ -32,7 +31,7 @@ export default function RootLayout({
         <footer className="bg-[#DFAF2C] w-full py-2 text-center">
           <p>Footer</p>
         </footer>
-        
+
       </body>
     </html>
   );
