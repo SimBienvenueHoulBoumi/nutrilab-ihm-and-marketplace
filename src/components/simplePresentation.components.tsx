@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function SimplePresentation() {
   return (
-    <>
+    <div className='my-2'>
       <h1 className="font-bold text-2xl">Let’s immortalize our passion for gastronomy</h1>
       <p className='text-[15px] w-4/6'>
         Immortalizing our passion for gastronomy means preserving
@@ -21,6 +21,6 @@ export default function SimplePresentation() {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   )
 }

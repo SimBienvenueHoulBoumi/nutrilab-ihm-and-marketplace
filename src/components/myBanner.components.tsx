@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export default function MyBanner() {
     return (
-        <div className="space-y-2">
-            <div className="rounded-lg mb-5 w-5/6 m-auto bg-[#8cafa4] text-white shadow-lg text-center p-2">
+        <>
+            <div className="w-full center flex m-auto bg-[#8cafa4] mt-2 text-white shadow-lg text-center p-4">
                 <p>
                     Need to have a diet that suits you?
                 </p>
@@ -13,15 +13,15 @@ export default function MyBanner() {
                     Trust us to support you in your search for culinary well-being.
                 </p>
             </div>
-            <div className="flex w-4/5 m-auto flex-col md:flex-row justify-center items-center md:space-x-4">
+            <div className="flex space-y-2 my-2 w-4/5 m-auto flex-col md:flex-row justify-center items-center md:space-x-4">
                 <Image
                     src="/images/salade-de-fruits.jpg"
                     alt="banner"
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={300}
                     className="rounded-lg shadow-lg shadow-blue-300"
                 />
-                <div className="flex flex-col space-y-2 text-center md:text-left p-3">
+                <div className="flex flex-col space-y-2 text-center md:text-left p-3 my-2">
                     <h1 className="font-bold text-2xl">Let’s immortalize our passion for gastronomy</h1>
                     <p className='text-[15px] w-4/6'>
                         Immortalizing our passion for gastronomy means preserving
@@ -41,7 +41,7 @@ export default function MyBanner() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

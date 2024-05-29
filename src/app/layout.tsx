@@ -24,7 +24,7 @@ export default function RootLayout({
           <MyHeader />
         </div>
 
-        <main className="flex-grow m-auto w-full">
+        <main className="flex-grow m-auto w-ful">
           {children}
         </main>
 
