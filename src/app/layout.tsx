@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import "./globals.css";
 import MyHeader from "@/components/myHeader.components";
+import MyGlobalFooter from "@/components/myGlobalFooter.components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,13 +25,9 @@ export default function RootLayout({
           <MyHeader />
         </div>
 
-        <main className="flex-grow m-auto w-ful">
+        <main className="flex-grow m-auto w-full h-full ">
           {children}
         </main>
-
-        <footer className="bg-[#DFAF2C] w-full py-2 text-center">
-          <p>Footer</p>
-        </footer>
 
       </body>
     </html>

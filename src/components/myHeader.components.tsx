@@ -7,16 +7,9 @@ import Image from "next/image";
 export default function MyHeader() {
     return (
         <>
-            <div className="flex w-full justify-between mx-4">
-                <div className='flex justify-between'>
-                    <Image
-                        src="/images/logo.png"
-                        width={50}
-                        height={50}
-                        alt="logo" />
-                    <p className="py-4 font-bold uppercase">nutrilab</p>
-                </div>
-                <div className="space-x-4 py-4 mx-2 flex flex-row text-white text-[15px] capitalize">
+            <div className="flex w-full justify-between mx-4 py-4">
+                <p className='uppercase'>Nutrilab</p>
+                <div className="space-x-4 mx-2 flex text-center flex-row text-black text-[15px] capitalize">
                     <div>
                         <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/" >Home</Link>
                     </div>
