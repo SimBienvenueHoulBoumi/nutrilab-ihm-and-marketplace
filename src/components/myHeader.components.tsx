@@ -19,6 +19,9 @@ export default function MyHeader() {
                     <div>
                         <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/register" >Register</Link>
                     </div>
+                    <div>
+                        <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/marketplace" >Marketplace</Link>
+                    </div>
                 </div>
             </div>
         </>

@@ -7,3 +7,5 @@ function Marketplace() {
         <>page market</>
     )
 }
+
+export default Marketplace
