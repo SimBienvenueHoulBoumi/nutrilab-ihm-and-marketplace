@@ -14,11 +14,11 @@ const fetchExternalCategory = async () => {
 
     const result = await response.json();
     
-    if(result.categories === null) {
+    if(result.meals === null) {
         throw new Error('No data found');
     }
 
-    return result;
+    return result.meals;
 };
 
 export { fetchExternalCategory };
