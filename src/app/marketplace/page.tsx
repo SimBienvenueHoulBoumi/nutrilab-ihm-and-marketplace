@@ -1,10 +1,13 @@
 "use client"
 
 import React from 'react'
+import ProductList from '@/components/productList.components'
 
 function Marketplace() {
     return (
-        <>page market</>
+        <div>
+            <ProductList />
+        </div>
     )
 }
 

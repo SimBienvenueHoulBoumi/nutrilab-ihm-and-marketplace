@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`flex flex-col ${inter.className}`}>
+    <html lang="en">
+      <body className={`flex flex-col ${inter.className}`} suppressHydrationWarning={true}>
 
         <div className="bg-[#DFAF2C] w-full flex justify-between">
           <MyHeader />
