@@ -1,11 +1,9 @@
-"use server";
-
 import { NextResponse, type NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
 const SECRET_KEY = new TextEncoder().encode(process.env.SECRET_KEY);
 
-async function isValidToken(token: string, secret: Uint8Array): Promise<boolean> {
+export async function isValidToken(token: string, secret: Uint8Array): Promise<boolean> {
     try {
         await jwtVerify(token, secret);
         return true;
