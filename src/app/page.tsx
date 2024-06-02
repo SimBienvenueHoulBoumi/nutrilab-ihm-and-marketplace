@@ -1,10 +1,49 @@
-import MyBanner from "@/components/myBanner.components"
-import MyGlobalFooter from "@/components/myGlobalFooter.components";
-import Offres from "@/components/offers.components"
+'use client';
 
+import React, { useEffect, useState, useCallback } from "react";
+import MyGlobalFooter from "@/components/myGlobalFooter.components";
+import { fetchRandomMeal } from "@/services/external.api.service";
 import Image from "next/image";
+import Link from 'next/link';
+import Meal from "@/interfaces/meal.interface";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [meal, setMeal] = useState<Meal | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const fetchMeal = useCallback(async () => {
+    console.log("fetchMeal called"); // Log pour vérifier l'appel de la fonction
+    try {
+      setLoading(true);
+      console.log("Loading set to true"); // Log pour vérifier la mise à jour de l'état de chargement
+
+      const mealData = await fetchRandomMeal();
+      console.log("Meal data fetched:", mealData); // Log pour vérifier les données récupérées
+
+      setMeal(mealData);
+    } catch (err: any) {
+      setError(err.message);
+      console.log("Error:", err.message); // Log pour vérifier l'erreur
+    } finally {
+      setLoading(false);
+      console.log("Loading set to false"); // Log pour vérifier la mise à jour de l'état de chargement
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMeal();
+  }, [fetchMeal]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <>
       <section className="h-full py-0 md:py-0 lg:py-0 bg-gradient-to-r from-[#9bee75] to-[#DFAF2C]">
@@ -12,43 +51,52 @@ export default function Home() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-gray-200 px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-400">
-                recipe of the day
+                Recipe of the day
               </div>
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
-                Tarte aux pommes caramélisées
-              </h1>
-              <p className="max-w-[600px] text-gray-500 md:text-xl">
-                Une recette réconfortante et délicieuse, parfaite pour un dessert en famille ou entre amis.
-              </p>
+              {meal && (
+                <>
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
+                    {meal.strMeal}
+                  </h1>
+                </>
+              )}
+              <div>
+                Cooking brings people together and brings many benefits to our body. By cooking together,
+                we strengthen our social bonds and create precious memories while taking care of our health.
+                So, let&apos;s all share our food together and make each meal a moment of conviviality and shared happiness.
+              </div>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <a
+              <Link href="/marketplace"
                 className="inline-flex h-10 items-center justify-center rounded-md bg-white px-8 text-sm font-medium text-gray-900 shadow transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                href="#"
               >
-                Show recipe details
-              </a>
-              <a
+                See all recipes
+              </Link>
+              <Link href="/register"
                 className="inline-flex h-10 items-center justify-center rounded-md border border-green-400 bg-transparent px-8 text-sm font-medium text-white shadow-sm transition-colors hover:bg-white hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
-                href="#"
               >
-                save this recipe
-              </a>
+                Join us now
+              </Link>
             </div>
           </div>
-          <Image
-            src="/images/salade-de-fruits.jpg"
-            alt="Recette phare"
-            width="700"
-            height="500"
-            className="mx-auto rounded-xl object-cover aspect-[7/5]"
-          />
+          {meal && (
+            <>
+              {!imageLoaded && <div>Loading image...</div>}
+              <Image
+                src={meal.strMealThumb}
+                alt={meal.strMeal}
+                width="700"
+                height="500"
+                className={`mx-auto rounded-xl object-cover aspect-[7/5] ${imageLoaded ? 'block' : 'hidden'}`}
+                onLoadingComplete={() => setImageLoaded(true)}
+              />
+            </>
+          )}
         </div>
       </section>
       <footer className="bg-[#DFAF2C] w-full text-center">
         <MyGlobalFooter />
       </footer>
     </>
-
   );
 }

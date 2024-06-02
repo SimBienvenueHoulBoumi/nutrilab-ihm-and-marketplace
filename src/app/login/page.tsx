@@ -8,14 +8,18 @@ import CustomInput from '@/components/myInput.components';
 import { IFormValues } from '@/types/formValues.types';
 import VerifyUser from '@/services/auth.service';
 
-
-
 function Login() {
     const { register, handleSubmit } = useForm<IFormValues>();
 
-    const onSubmit: SubmitHandler<IFormValues> = (data, event) => {
+    const onSubmit: SubmitHandler<IFormValues> = async (data, event) => {
         event?.preventDefault();
-        VerifyUser(data.email, data.password);
+
+        if (await VerifyUser(data.email, data.password)) {
+            window.location.href = '/';
+            window.location.reload();
+        } else {
+            console.log("error credential");
+        }
     };
 
     return (
