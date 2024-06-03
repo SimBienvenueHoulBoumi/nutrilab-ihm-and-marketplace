@@ -5,44 +5,8 @@ import MyGlobalFooter from "@/components/myGlobalFooter.components";
 import { fetchRandomMeal } from "@/services/external.api.service";
 import Image from "next/image";
 import Link from 'next/link';
-import Meal from "@/interfaces/meal.interface";
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [meal, setMeal] = useState<Meal | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  const fetchMeal = useCallback(async () => {
-    console.log("fetchMeal called"); // Log pour vérifier l'appel de la fonction
-    try {
-      setLoading(true);
-      console.log("Loading set to true"); // Log pour vérifier la mise à jour de l'état de chargement
-
-      const mealData = await fetchRandomMeal();
-      console.log("Meal data fetched:", mealData); // Log pour vérifier les données récupérées
-
-      setMeal(mealData);
-    } catch (err: any) {
-      setError(err.message);
-      console.log("Error:", err.message); // Log pour vérifier l'erreur
-    } finally {
-      setLoading(false);
-      console.log("Loading set to false"); // Log pour vérifier la mise à jour de l'état de chargement
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchMeal();
-  }, [fetchMeal]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <>
@@ -53,13 +17,11 @@ export default function Home() {
               <div className="inline-block rounded-lg bg-gray-200 px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-400">
                 Recipe of the day
               </div>
-              {meal && (
-                <>
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
-                    {meal.strMeal}
-                  </h1>
-                </>
-              )}
+              <>
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
+                  Together we can
+                </h1>
+              </>
               <div>
                 Cooking brings people together and brings many benefits to our body. By cooking together,
                 we strengthen our social bonds and create precious memories while taking care of our health.
@@ -79,19 +41,15 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          {meal && (
-            <>
-              {!imageLoaded && <div>Loading image...</div>}
-              <Image
-                src={meal.strMealThumb}
-                alt={meal.strMeal}
-                width="700"
-                height="500"
-                className={`mx-auto rounded-xl object-cover aspect-[7/5] ${imageLoaded ? 'block' : 'hidden'}`}
-                onLoadingComplete={() => setImageLoaded(true)}
-              />
-            </>
-          )}
+          <>
+            <Image
+              src="https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg"
+              alt="https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg"
+              width="500"
+              height="500"
+              className='mx-auto rounded-xl object-cover aspect-[7/5] block'
+            />
+          </>
         </div>
       </section>
       <footer className="bg-[#DFAF2C] w-full text-center">
