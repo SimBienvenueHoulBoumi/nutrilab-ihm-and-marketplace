@@ -1,16 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
+import { JwtPayload } from './interfaces/jwtPayload.interface'; 
+
 
 const SECRET_KEY = new TextEncoder().encode(process.env.SECRET_KEY);
 
 export async function isValidToken(token: string, secret: Uint8Array): Promise<boolean> {
     try {
-        await jwtVerify(token, secret);
-        return true;
+        const { payload } = await jwtVerify(token, secret) as { payload: JwtPayload };
+        return payload.sub.role === 'user';
     } catch (e) {
         return false;
     }
 }
+
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;

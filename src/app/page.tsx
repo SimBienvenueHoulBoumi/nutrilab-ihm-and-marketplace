@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import MyGlobalFooter from "@/components/myGlobalFooter.components";
-import { fetchRandomMeal } from "@/services/external.api.service";
 import Image from "next/image";
 import Link from 'next/link';
 
@@ -34,10 +33,10 @@ export default function Home() {
               >
                 See all recipes
               </Link>
-              <Link href="/register"
+              <Link href="/login"
                 className="inline-flex h-10 items-center justify-center rounded-md border border-green-400 bg-transparent px-8 text-sm font-medium text-white shadow-sm transition-colors hover:bg-white hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
               >
-                Join us now
+                Login or join us now
               </Link>
             </div>
           </div>

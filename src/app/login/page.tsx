@@ -1,8 +1,9 @@
-"use client"
+'use client';
 
-import React from 'react';
+import { useForm, SubmitHandler } from "react-hook-form";
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { ClipLoader } from 'react-spinners';
 
 import CustomInput from '@/components/myInput.components';
 import { IFormValues } from '@/types/formValues.types';
@@ -10,15 +11,24 @@ import VerifyUser from '@/services/auth.service';
 
 function Login() {
     const { register, handleSubmit } = useForm<IFormValues>();
+    const [loading, setLoading] = useState(false);
 
     const onSubmit: SubmitHandler<IFormValues> = async (data, event) => {
         event?.preventDefault();
+        setLoading(true); // Déclencher le chargement
 
-        if (await VerifyUser(data.email, data.password)) {
-            window.location.href = '/';
-            window.location.reload();
-        } else {
-            console.log("error credential");
+        try {
+            const isValid = await VerifyUser(data.email, data.password);
+            if (isValid) {
+                window.location.href = '/';
+                window.location.reload();
+            } else {
+                console.log("error credential");
+                setLoading(false); // Arrêter le chargement
+            }
+        } catch (error) {
+            console.error("Error during verification:", error);
+            setLoading(false); // Arrêter le chargement en cas d'erreur
         }
     };
 
@@ -44,9 +54,11 @@ function Login() {
                         />
                         <button
                             type="submit"
-                            className="flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2"
+                            disabled={loading}
+                            className={`flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
                         >
-                            Login
+                            {loading ? <ClipLoader color="#fff" size={20} /> : 'Login'}
                         </button>
                         <div className="text-center text-gray-500">
                             Don&apos;t have an account?{' '}

@@ -7,9 +7,8 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  color: black;
+  background-color: #ffffff;
 }
 
-body{
-  overflow-y: scroll;
-  background-color: #F2F3F5;
-}
+
