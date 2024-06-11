@@ -30,24 +30,21 @@ export default function MyHeader() {
     return (
         <div className="flex w-full justify-between py-4">
             <div className='uppercase mx-2'>Nutrilab</div>
-            <div className="space-x-4 mx-2 flex text-center flex-row font-black text-black text-[15px] capitalize">
-                {isAuthenticated ? (
-                    <>
-                        <Link className='border-0 hover:text-[#20847D]' href="/marketplace">Marketplace</Link>
-                        <Link className='border-0 hover:text-[#20847D]' href="/">Home</Link>
-                        <Link className='border-0 hover:text-[#20847D]' href="/profile">Profile</Link>
-                        <button
-                            onClick={logout}
-                            disabled={loading}
-                            className={`border-0 hover:text-red flex items-center ${
-                                loading ? 'opacity-50 cursor-not-allowed' : ''
+            {isAuthenticated ? (
+                <div className="space-x-4 mx-2 flex text-center flex-row font-black text-black text-[15px] capitalize">
+                    <Link className='border-0 hover:text-[#20847D]' href="/marketplace">Marketplace</Link>
+                    <Link className='border-0 hover:text-[#20847D]' href="/">Home</Link>
+                    <Link className='border-0 hover:text-[#20847D]' href="/profile">Profile</Link>
+                    <button
+                        onClick={logout}
+                        disabled={loading}
+                        className={`border-0 hover:text-red flex items-center ${loading ? 'opacity-50 cursor-not-allowed' : ''
                             }`}
-                        >
-                            {loading ? <ClipLoader color="#000" size={20} /> : 'Logout'}
-                        </button>
-                    </>
-                ) : ""}
-            </div>
+                    >
+                        {loading ? <ClipLoader color="#000" size={20} /> : 'Logout'}
+                    </button>
+                </div>
+            ) : ""}
         </div>
     );
 }
