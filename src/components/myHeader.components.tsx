@@ -35,6 +35,7 @@ export default function MyHeader() {
                     <>
                         <Link className='border-0 hover:text-[#20847D]' href="/marketplace">Marketplace</Link>
                         <Link className='border-0 hover:text-[#20847D]' href="/">Home</Link>
+                        <Link className='border-0 hover:text-[#20847D]' href="/profile">Profile</Link>
                         <button
                             onClick={logout}
                             disabled={loading}
