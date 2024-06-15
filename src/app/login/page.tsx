@@ -15,20 +15,20 @@ function Login() {
 
     const onSubmit: SubmitHandler<IFormValues> = async (data, event) => {
         event?.preventDefault();
-        setLoading(true); // Déclencher le chargement
+        setLoading(true);
 
         try {
             const isValid = await VerifyUser(data.email, data.password);
             if (isValid) {
-                window.location.href = '/';
+                window.location.href = '/marketplace';
                 window.location.reload();
             } else {
                 console.log("error credential");
-                setLoading(false); // Arrêter le chargement
+                setLoading(false);
             }
         } catch (error) {
             console.error("Error during verification:", error);
-            setLoading(false); // Arrêter le chargement en cas d'erreur
+            setLoading(false);
         }
     };
 

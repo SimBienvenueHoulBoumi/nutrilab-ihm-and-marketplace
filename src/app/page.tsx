@@ -7,7 +7,7 @@ export default function page() {
   return (
     <>
       <section className="min-h-screen flex space-y-4 flex-col justify-between bg-gradient-to-r from-[#9bee75] to-[#DFAF2C]">
-        <div className="w-full flex mx-auto justify-center md:px-6 lg:px-8 flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 max-w-5xl">
+        <div className="w-full flex mx-auto md:px-6 lg:px-8 flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 max-w-5xl">
           <div className="flex mt-8 flex-col justify-center space-y-4 p-6 rounded-lg">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-gray-200 px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-400">
