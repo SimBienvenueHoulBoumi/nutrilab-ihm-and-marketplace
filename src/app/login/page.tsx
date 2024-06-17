@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import React, { useState } from 'react';
@@ -7,28 +7,29 @@ import { ClipLoader } from 'react-spinners';
 
 import CustomInput from '@/components/myInput.components';
 import { IFormValues } from '@/types/formValues.types';
-import VerifyUser from '@/services/auth.service';
+import { VerifyUser } from '@/services/auth.service';
 
 function Login() {
     const { register, handleSubmit } = useForm<IFormValues>();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const onSubmit: SubmitHandler<IFormValues> = async (data, event) => {
         event?.preventDefault();
         setLoading(true);
+        setError(null);
 
         try {
             const isValid = await VerifyUser(data.email, data.password);
             if (isValid) {
                 window.location.href = '/marketplace';
-                window.location.reload();
             } else {
-                console.log("error credential");
                 setLoading(false);
+                setError('Invalid email or password.');
             }
         } catch (error) {
-            console.error("Error during verification:", error);
             setLoading(false);
+            setError('An error occurred during login.');
         }
     };
 
@@ -41,22 +42,24 @@ function Login() {
                     </h2>
                     <form className="space-y-3" method="POST" onSubmit={handleSubmit(onSubmit)}>
                         <CustomInput
-                            label="email"
+                            label="Email"
                             type='email'
-                            register={register}
-                            required={true}
+                            register={register("email", { required: true })}
                         />
                         <CustomInput
-                            label="password"
+                            label="Password"
                             type='password'
-                            register={register}
-                            required={true}
+                            register={register("password", { required: true })}
                         />
+                        {error && (
+                            <div className="text-red-500 text-sm">
+                                {error}
+                            </div>
+                        )}
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''
-                                }`}
+                            className={`flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {loading ? <ClipLoader color="#fff" size={20} /> : 'Login'}
                         </button>

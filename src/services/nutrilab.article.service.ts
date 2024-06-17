@@ -7,27 +7,31 @@ const url = process.env.NEXT_PUBLIC_EXTERNAL_API_URL;
 
 const getArticles = async (): Promise<Article[]> => {
     const token = cookies().get('token')?.value || "";
+    if (!token) {
+        console.error('No token found in cookies');
+        return [];
+    }
 
     try {
-        const response = await fetch(`${url}/articles`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API_URL}/articles`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             },
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Network response was not ok: ${response.statusText}`);
         }
 
         const data = await response.json();
 
-        if (Array.isArray(data)) {
-            return data as Article[];
-        } else {
+        if (!Array.isArray(data)) {
             throw new Error('Data received is not in expected format');
         }
+
+        return data as Article[];
     } catch (error) {
         console.error('Failed to fetch articles:', error);
         return [];

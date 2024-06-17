@@ -10,7 +10,6 @@ export async function isValidToken(token: string, secret: Uint8Array): Promise<b
         const { payload } = await jwtVerify(token, secret) as { payload: JwtPayload };
         return payload.sub.role === 'user';
     } catch (e) {
-        console.error("JWT verification failed:", e);
         return false;
     }
 }
@@ -35,7 +34,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        '/',
         '/marketplace',
         '/profile',
         '/login',

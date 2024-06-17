@@ -1,18 +1,23 @@
-"use client"
-
 import React from 'react';
-import InputProps from '@/interfaces/myInput.interfaces';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
-const CustomInput = ({ label, register, required, type }: InputProps) => (
-    <label className="block text-sm font-medium text-gray-700">
-        {label}
+interface CustomInputProps {
+    label: string;
+    type: string;
+    register: UseFormRegisterReturn;
+    required?: boolean;
+}
+
+const CustomInput: React.FC<CustomInputProps> = ({ label, type, register, required }) => (
+    <div>
+        <label className="block text-sm font-medium text-gray-700">{label}</label>
         <input
-            {...register(label, { required })}
             type={type}
-            autoComplete={label}
-            className="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+            {...register}
+            required={required}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
-    </label>
+    </div>
 );
 
 export default CustomInput;
