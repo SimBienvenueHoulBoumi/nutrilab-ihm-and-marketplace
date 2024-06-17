@@ -1,29 +1,50 @@
-"use client"
+'use client';
 
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import Link from "next/link";
-import Image from "next/image";
+import { isTokenHere, cleanAndRemoveToken } from '@/services/auth.service';
+import { ClipLoader } from 'react-spinners';
 
 export default function MyHeader() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        async function checkAuth() {
+            const authStatus = await isTokenHere();
+            setIsAuthenticated(authStatus);
+        }
+        checkAuth();
+    }, []);
+
+    async function logout() {
+        setLoading(true);
+        cleanAndRemoveToken();
+        setIsAuthenticated(false);
+
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 2000);
+    }
+
     return (
-        <>
-            <div className="flex w-full justify-between mx-4 py-4">
-                <p className='uppercase'>Nutrilab</p>
-                <div className="space-x-4 mx-2 flex text-center flex-row text-black text-[15px] capitalize">
-                    <div>
-                        <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/" >Home</Link>
-                    </div>
-                    <div>
-                        <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/login" >Login</Link>
-                    </div>
-                    <div>
-                        <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/register" >Register</Link>
-                    </div>
-                    <div>
-                        <Link className='border-0 hover:border-b-2 hover:border-[#20847D]' href="/marketplace" >Marketplace</Link>
-                    </div>
+        <div className="flex w-full justify-between py-4">
+            <div className='uppercase mx-2'>Nutrilab</div>
+            {isAuthenticated ? (
+                <div className="space-x-4 mx-2 flex text-center flex-row font-black text-black text-[15px] capitalize">
+                    <Link className='border-0 hover:text-[#20847D]' href="/marketplace">Marketplace</Link>
+                    <Link className='border-0 hover:text-[#20847D]' href="/">Home</Link>
+                    <Link className='border-0 hover:text-[#20847D]' href="/profile">Profile</Link>
+                    <button
+                        onClick={logout}
+                        disabled={loading}
+                        className={`border-0 hover:text-red flex items-center ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
+                    >
+                        {loading ? <ClipLoader color="#000" size={20} /> : 'Logout'}
+                    </button>
                 </div>
-            </div>
-        </>
-    )
+            ) : ""}
+        </div>
+    );
 }
