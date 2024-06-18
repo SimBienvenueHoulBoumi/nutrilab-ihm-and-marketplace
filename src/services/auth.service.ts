@@ -24,9 +24,6 @@ export async function VerifyUser(email: string, password: string) {
 
         const data = await response.json();
 
-        // Log the received data for verification
-        console.log('Login response data:', data);
-
         cookies().set('token', data.access_token);
         return true;
     } catch (error) {

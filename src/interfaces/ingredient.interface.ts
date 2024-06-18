@@ -12,7 +12,7 @@ export interface IngredientDto {
     name: string;
     picture: string,
     labelDosage: string,
-    dosage: string,
+    dosage: number,
 }
 
 export interface IFormValues {
