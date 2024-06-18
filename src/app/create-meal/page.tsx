@@ -17,7 +17,7 @@ const CreateMeal: React.FC = () => {
             name: '',
             description: '',
             area: '',
-            ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '' }],
+            ingredients: [{ name: '', picture: '', labelDosage: '', dosage: 0 }],
         },
     });
 
@@ -52,7 +52,7 @@ const CreateMeal: React.FC = () => {
                 name: '',
                 description: '',
                 area: '',
-                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '' }],
+                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: 0 }],
             });
             setError(null);
         } catch (error) {
@@ -89,7 +89,7 @@ const CreateMeal: React.FC = () => {
                 name: '',
                 description: '',
                 area: '',
-                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '' }],
+                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: 0 }],
             });
 
             setArticleId(null);
