@@ -6,7 +6,6 @@ import { ClipLoader } from 'react-spinners';
 import CustomInput from '@/components/myInput.components';
 import CustomSelect from '@/components/customSelect.components';
 import { createArticle } from '@/services/nutrilab.article.service';
-
 import { createIngredient } from '@/services/nutrilab.ingredient.service';
 import { ICreateMealForm } from '@/interfaces/meal.interface';
 import areaOptions from '@/constantes/area';
@@ -17,7 +16,7 @@ const CreateMeal: React.FC = () => {
             name: '',
             description: '',
             area: '',
-            ingredients: [{ name: '', picture: '', labelDosage: '', dosage: 0 }],
+            ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '0' }],
         },
     });
 
@@ -52,7 +51,7 @@ const CreateMeal: React.FC = () => {
                 name: '',
                 description: '',
                 area: '',
-                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: 0 }],
+                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '0' }],
             });
             setError(null);
         } catch (error) {
@@ -78,7 +77,7 @@ const CreateMeal: React.FC = () => {
                         name: ingredient.name,
                         picture: ingredient.picture,
                         labelDosage: ingredient.labelDosage,
-                        dosage: ingredient.dosage,
+                        dosage: Number(ingredient.dosage),
                     }, articleId);
                 } catch (ingredientError) {
                     throw new Error(`Failed to create ingredient ${ingredient.name}`);
@@ -89,7 +88,7 @@ const CreateMeal: React.FC = () => {
                 name: '',
                 description: '',
                 area: '',
-                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: 0 }],
+                ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '0' }],
             });
 
             setArticleId(null);
@@ -195,7 +194,7 @@ const CreateMeal: React.FC = () => {
                                     <button
                                         type="button"
                                         className="bg-green-500 text-white px-4 py-2 rounded"
-                                        onClick={() => append({ name: "", picture: "", labelDosage: "", dosage: "" })}
+                                        onClick={() => append({ name: "", picture: "", labelDosage: "", dosage: '0' })}
                                     >
                                         Add Ingredient
                                     </button>
