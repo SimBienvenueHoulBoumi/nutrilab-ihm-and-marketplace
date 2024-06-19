@@ -117,12 +117,14 @@ const CreateMeal: React.FC = () => {
                                         label="Name"
                                         type="text"
                                         register={register("name")}
+                                        name="name"
                                         required
                                     />
                                     <CustomInput
                                         label="Description"
                                         type="text"
                                         register={register("description")}
+                                        name="description"
                                         required
                                     />
                                     <CustomSelect

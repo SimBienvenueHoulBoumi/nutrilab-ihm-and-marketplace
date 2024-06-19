@@ -7,8 +7,9 @@ import CustomInput from '@/components/myInput.components';
 import { IFormValues } from '@/types/formValues.types';
 import { getArticles } from '@/services/nutrilab.article.service';
 import Article from '@/interfaces/article.interface';
-import { getUserInfo } from '@/services/auth.service';
 import User from '@/interfaces/user.interface';
+
+import { getUserInfo, getLocalUserId } from '@/services/auth.service';
 
 function Profile() {
   const { register, handleSubmit } = useForm<IFormValues>();
@@ -16,16 +17,17 @@ function Profile() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [articleLoading, setArticleLoading] = useState(false);
   const [userInfo, setUserInfo] = useState<User>();
+  const [localUserId, setLocalUserId] = useState<string>("");
 
   useEffect(() => {
     fetchUserInfo();
     fetchArticles();
+    fetchLocalUserId();
   }, []);
 
   const fetchUserInfo = async () => {
     try {
-      const userData = await getUserInfo();
-      setUserInfo(userData);
+      setUserInfo(await getUserInfo())
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
@@ -43,13 +45,13 @@ function Profile() {
     }
   };
 
-  const onSubmitProfile: SubmitHandler<IFormValues> = (data) => {
-    setLoading(true);
-    console.log('Form data:', data);
-    setTimeout(() => {
-      setLoading(false);
-      console.log('Form submitted');
-    }, 2000);
+  const fetchLocalUserId = async () => {
+    try {
+      const userId = await getLocalUserId();
+      setLocalUserId(userId);
+    } catch (error) {
+      console.error('Error fetching local user ID:', error);
+    }
   };
 
   const onSubmitPassword: SubmitHandler<IFormValues> = (data) => {
@@ -79,28 +81,13 @@ function Profile() {
                 <p>Loading user information...</p>
               )}
             </div>
-            {/* Edit Profile Section */}
-            <div className="bg-white shadow-md rounded-md p-6">
-              <h2 className="text-3xl font-bold text-gray-900">Edit Profile</h2>
-              <form className="space-y-3" onSubmit={handleSubmit(onSubmitProfile)}>
-                <CustomInput label="First Name" type="text" register={register} required />
-                <CustomInput label="Last Name" type="text" register={register} required />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={`w-full rounded-md bg-[#20847D] py-2 px-4 text-sm text-white shadow-sm hover:bg-opacity-75 focus:ring-2 focus:ring-sky-400 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  {loading ? <ClipLoader color="#fff" size={20} /> : 'Save Profile'}
-                </button>
-              </form>
-            </div>
             {/* Update Password Section */}
             <div className="bg-white shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">Update Password</h2>
               <form className="space-y-3" onSubmit={handleSubmit(onSubmitPassword)}>
-                <CustomInput label="Current Password" type="password" register={register} required />
-                <CustomInput label="New Password" type="password" register={register} required />
-                <CustomInput label="Confirm Password" type="password" register={register} required />
+                <CustomInput label="Current Password" name="current_password" type="password" register={register} required />
+                <CustomInput label="New Password" name="new_password" type="password" register={register} required />
+                <CustomInput label="Confirm Password" name="confirm_password" type="password" register={register} required />
                 <button
                   type="submit"
                   disabled={loading}
@@ -128,7 +115,9 @@ function Profile() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {articles.map((article) => (
+                    {articles.filter(
+                      e => e.userId === localUserId
+                    ).map((article) => (
                       <tr key={article.id}>
                         <td className="px-6 py-4 text-sm text-gray-900">{article.name}</td>
                         <td className="px-6 py-4 text-sm text-gray-900">{article.description}</td>
