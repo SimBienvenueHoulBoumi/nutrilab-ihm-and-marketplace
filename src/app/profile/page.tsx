@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -85,9 +85,27 @@ function Profile() {
             <div className="bg-white shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">Update Password</h2>
               <form className="space-y-3" onSubmit={handleSubmit(onSubmitPassword)}>
-                <CustomInput label="Current Password" name="current_password" type="password" register={register} required />
-                <CustomInput label="New Password" name="new_password" type="password" register={register} required />
-                <CustomInput label="Confirm Password" name="confirm_password" type="password" register={register} required />
+                <CustomInput
+                  label="Current Password"
+                  name="current_password"
+                  type="password"
+                  register={register}
+                  required
+                />
+                <CustomInput
+                  label="New Password"
+                  name="new_password"
+                  type="password"
+                  register={register}
+                  required
+                />
+                <CustomInput
+                  label="Confirm Password"
+                  name="confirm_password"
+                  type="password"
+                  register={register}
+                  required
+                />
                 <button
                   type="submit"
                   disabled={loading}
