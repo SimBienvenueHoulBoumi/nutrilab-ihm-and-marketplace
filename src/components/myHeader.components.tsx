@@ -21,10 +21,7 @@ export default function MyHeader() {
         setLoading(true);
         cleanAndRemoveToken();
         setIsAuthenticated(false);
-
-        setTimeout(() => {
-            window.location.href = '/';
-        }, 2000);
+        window.location.href = '/';
     }
 
     return (

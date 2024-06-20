@@ -8,15 +8,6 @@ import { JwtPayload } from '@/interfaces/jwtPayload.interface';
 
 const url = process.env.NEXT_PUBLIC_EXTERNAL_API_URL;
 
-
-interface UserInfo {
-    id: string;
-    email: string;
-    firstname: string;
-    lastname: string;
-    role: string;
-}
-
 export async function VerifyUser(email: string, password: string) {
     try {
         const response = await fetch(`${url}/auth/login`, {
@@ -27,8 +18,7 @@ export async function VerifyUser(email: string, password: string) {
             body: JSON.stringify({ email, password }),
         });
 
-        if (!response.ok) {
-            // Log the status and status text for better error diagnosis
+        if (response.status !== 200) {
             console.error(`Login request failed with status: ${response.status} ${response.statusText}`);
             throw new Error('Network response was not ok');
         }
@@ -98,3 +88,56 @@ export async function cleanAndRemoveToken(): Promise<void> {
     const cookieStore = cookies();
     cookieStore.delete('token');
 }
+
+export async function registerUser(email: string, password: string, firstname: string, lastname: string): Promise<boolean> {
+    try {
+        const response = await fetch(`${url}/auth/register-user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password, firstname, lastname }),
+        });
+
+        if (response.status === 201) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error during registration:', error);
+        return false;
+    }
+}
+
+export async function changePassword(oldPassword: string, newPassword: string, email: string): Promise<boolean> {
+    const token = cookies().get('token')?.value || "";
+    if (!token) {
+        console.error('No token found in cookies');
+        return false;
+    }
+    try {
+        const response = await fetch(`${url}/users/change-password/${email}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                oldPassword,
+                newPassword,
+            }),
+        });
+
+        if (response.status === 201) {
+            const responseBody = await response.text();
+            if (responseBody === "Password changed successfully") {
+                return true;
+            }
+        }
+        return false;
+    } catch (error) {
+        console.error('Error during password change:', error);
+        return false;
+    }
+}
+

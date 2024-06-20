@@ -5,22 +5,25 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { ClipLoader } from 'react-spinners';
 import CustomInput from '@/components/myInput.components';
 import { IFormValues } from '@/types/formValues.types';
-import { getArticles, deleteArticle } from '@/services/nutrilab.article.service'; // Assuming you have a deleteArticle function
+import { getArticles, deleteArticle } from '@/services/nutrilab.article.service';
 import Article from '@/interfaces/article.interface';
 import User from '@/interfaces/user.interface';
 
-import { getUserInfo, getLocalUserId } from '@/services/auth.service';
+import { getUserInfo, getLocalUserId, changePassword } from '@/services/auth.service';
 
 function Profile() {
-  const { register, handleSubmit } = useForm<IFormValues>();
+  const { register, handleSubmit, reset, formState: { errors }, watch } = useForm<IFormValues>();
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
   const [articleLoading, setArticleLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState<User>();
+  const [userInfo, setUserInfo] = useState<User | null>(null);
   const [localUserId, setLocalUserId] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 5;
   const pagesToShow = 3;
+
+  const newPassword = watch('new_password');
+  const currentPassword = watch('current_password');
 
   useEffect(() => {
     fetchUserInfo();
@@ -30,7 +33,8 @@ function Profile() {
 
   const fetchUserInfo = async () => {
     try {
-      setUserInfo(await getUserInfo())
+      const user = await getUserInfo();
+      setUserInfo(user);
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
@@ -57,11 +61,27 @@ function Profile() {
     }
   };
 
-  const onSubmitPassword: SubmitHandler<IFormValues> = (data) => {
+  const onSubmitChangePassword: SubmitHandler<IFormValues> = async (data) => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const { current_password, new_password } = data;
+      if (userInfo) {
+        const success = await changePassword(current_password, new_password, userInfo.email);
+        if (success) {
+          reset();
+          alert('Password changed successfully!');
+        } else {
+          alert('Failed to change password. Please try again.');
+        }
+      } else {
+        alert('User information not available. Please refresh and try again.');
+      }
+    } catch (error: any) {
+      console.error('Error changing password:', error.message);
+      alert('Failed to change password. Please try again.');
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   const indexOfLastArticle = currentPage * articlesPerPage;
@@ -112,7 +132,7 @@ function Profile() {
 
   const handleDeleteArticle = async (articleId: string) => {
     try {
-      await deleteArticle(articleId); 
+      await deleteArticle(articleId);
       fetchArticles();
     } catch (error) {
       console.error('Error deleting article:', error);
@@ -140,28 +160,43 @@ function Profile() {
             {/* Update Password Section */}
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">Update Password</h2>
-              <form className="space-y-3" onSubmit={handleSubmit(onSubmitPassword)}>
-                <CustomInput
-                  label="Current Password"
-                  name="current_password"
-                  type="password"
-                  register={register}
-                  required
-                />
-                <CustomInput
-                  label="New Password"
-                  name="new_password"
-                  type="password"
-                  register={register}
-                  required
-                />
-                <CustomInput
-                  label="Confirm Password"
-                  name="confirm_password"
-                  type="password"
-                  register={register}
-                  required
-                />
+              <form className="space-y-3" onSubmit={handleSubmit(onSubmitChangePassword)}>
+                <div>
+                  <CustomInput
+                    label="Current Password"
+                    name="current_password"
+                    type="password"
+                    register={register}
+                    required
+                  />
+                  {errors.current_password && (
+                    <p className="text-red-600 text-sm">Current password is required.</p>
+                  )}
+                </div>
+                <div>
+                  <CustomInput
+                    label="New Password"
+                    name="new_password"
+                    type="password"
+                    register={register}
+                    required
+                  />
+                  {errors.new_password && (
+                    <p className="text-red-600 text-sm">{errors.new_password.message}</p>
+                  )}
+                </div>
+                <div>
+                  <CustomInput
+                    label="Confirm Password"
+                    name="confirm_password"
+                    type="password"
+                    register={register}
+                    required
+                  />
+                  {errors.confirm_password && (
+                    <p className="text-red-600 text-sm">{errors.confirm_password.message}</p>
+                  )}
+                </div>
                 <button
                   type="submit"
                   disabled={loading}
@@ -193,18 +228,18 @@ function Profile() {
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-200">
+                      <tbody>
                         {currentArticles.map((article) => (
-                          <tr key={article.id}>
+                          <tr key={article.id} className="bg-white">
                             <td className="px-6 py-4 text-sm text-gray-900">{article.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-900">{article.description}</td>
                             <td className="px-6 py-4 text-sm text-gray-900">{article.area}</td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
+                            <td className="px-6 py-4 text-sm text-gray-900 space-x-2">
                               <button
+                                className="px-2 py-1 text-xs text-red-600 border border-red-600 rounded hover:bg-red-600 hover:text-white"
                                 onClick={() => handleDeleteArticle(article.id)}
-                                className="px-3 py-1 bg-red-500 rounded-md hover:bg-red-600 focus:outline-none"
                               >
-                                Supprimer
+                                Delete
                               </button>
                             </td>
                           </tr>
@@ -212,22 +247,29 @@ function Profile() {
                       </tbody>
                     </table>
                   )}
+                  {/* Pagination */}
                   <div className="mt-4 flex justify-center">
-                    <button
-                      onClick={goToPrevPage}
-                      disabled={currentPage === 1}
-                      className={`px-4 py-2 mx-1 border rounded-md ${currentPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'border-1 border-solid border-gray-300 text-gray-700'}`}
-                    >
-                      Prev
-                    </button>
-                    {renderPaginationButtons()}
-                    <button
-                      onClick={goToNextPage}
-                      disabled={currentPage === totalPages}
-                      className={`px-4 py-2 mx-1 border rounded-md ${currentPage === totalPages ? 'bg-gray-500 cursor-not-allowed' : 'border-1 border-solid border-gray-300 text-gray-700'}`}
-                    >
-                      Next
-                    </button>
+                    {totalPages > 1 && (
+                      <div className="flex space-x-2">
+                        {currentPage > 1 && (
+                          <button
+                            onClick={goToPrevPage}
+                            className="px-4 py-2 border rounded-md border-gray-300 text-gray-700"
+                          >
+                            Prev
+                          </button>
+                        )}
+                        {renderPaginationButtons()}
+                        {currentPage < totalPages && (
+                          <button
+                            onClick={goToNextPage}
+                            className="px-4 py-2 border rounded-md border-gray-300 text-gray-700"
+                          >
+                            Next
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </>
               )}

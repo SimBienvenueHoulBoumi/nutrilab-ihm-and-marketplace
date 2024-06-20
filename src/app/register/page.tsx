@@ -1,9 +1,41 @@
-"use client"
+"use client";
 
-import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import Link from 'next/link';
+import { ClipLoader } from 'react-spinners';
 
-function Register() {
+import CustomInput from '@/components/myInput.components';
+import { registerUser } from '@/services/auth.service';
+import { IRegisterFormValues } from '@/interfaces/myInput.interfaces';
+
+const Register: React.FC = () => {
+    const { register, handleSubmit } = useForm<IRegisterFormValues>();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const onSubmit: SubmitHandler<IRegisterFormValues> = async (data, event) => {
+        event?.preventDefault();
+        setLoading(true);
+        setError(null);
+
+        try {
+            if (data.password !== data.password2) {
+                setError("Passwords do not match");
+                return;
+            }
+            const response = await registerUser(data.email, data.password, data.firstname, data.lastname);
+            if (response) {
+                window.location.href = '/login';
+            } else {
+                setError("Couldn't register user. Please try again.");
+            }
+        } catch (error) {
+            setError('An error occurred during registration.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="h-full flex items-center justify-center px-4 py-auto sm:px-6 lg:px-8">
@@ -13,38 +45,59 @@ function Register() {
                         Signin an account
                     </h2>
 
-                    <form className="space-y-3" method="POST">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                            Email
-                            <input name="email" type="email" autoComplete="email@mail.com" required
-                                className="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm" />
-                        </label>
+                    <form className="space-y-3" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                        <CustomInput
+                            label="Email"
+                            type="email"
+                            name="email"
+                            required
+                            register={register}
+                        />
+                        <CustomInput
+                            label="Password"
+                            type="password"
+                            name="password"
+                            required
+                            register={register}
+                        />
 
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                            Password
-                            <div className="p-1">
-                                <p className="text-xs text-gray-500">Must be at least 8 characters</p>
-                                <p className="text-xs text-gray-500">Must contain at least one uppercase letter, one lowercase letter</p>
-                                <p className="text-xs text-gray-500">Must contain at least one number</p>
-                                <p className="text-xs text-gray-500">Must contain at least one special character</p>
+                        <CustomInput
+                            label="Confirm Password"
+                            type="password"
+                            name="password2"
+                            required
+                            register={register}
+                        />
+                        <CustomInput
+                            label="First Name"
+                            type="text"
+                            name="firstname"
+                            required
+                            register={register}
+                        />
+                        <CustomInput
+                            label="Last Name"
+                            type="text"
+                            name="lastname"
+                            required
+                            register={register}
+                        />
+
+                        {error && (
+                            <div className="text-red-500 text-sm">
+                                {error}
                             </div>
-                            <input name="password" type="password" autoComplete='*******' required
-                                className="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm" />
-                        </label>
-
-                        <label htmlFor="password2" className="block text-sm font-medium text-gray-700">
-                            Confirm Password
-                            <input name="password2" type="password" autoComplete='*******' required
-                                className="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm" />
-                        </label>
+                        )}
 
                         <button
                             type="submit"
-                            className="flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2">
-                            register
+                            disabled={loading}
+                            className={`flex w-full justify-center rounded-md border border-transparent bg-[#20847D] py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {loading ? <ClipLoader color="#fff" size={20} /> : 'Register'}
                         </button>
                         <div className="text-center text-gray-500">
-                            Already have an account?
+                            Already have an account?{' '}
                             <Link href="/login">
                                 <div className='hover:underline hover:text-[#20847D]'>Login</div>
                             </Link>
@@ -53,7 +106,7 @@ function Register() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Register
+export default Register;

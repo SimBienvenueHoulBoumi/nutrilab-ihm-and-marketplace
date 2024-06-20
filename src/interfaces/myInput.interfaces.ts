@@ -7,3 +7,11 @@ export default interface InputProps {
     required: boolean;
     type: string;
 };
+
+export interface IRegisterFormValues {
+    email: string;
+    password: string;
+    password2: string;
+    firstname: string;
+    lastname: string;
+}
