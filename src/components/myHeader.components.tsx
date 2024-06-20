@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 import { isTokenHere, cleanAndRemoveToken } from '@/services/auth.service';
@@ -21,7 +19,10 @@ export default function MyHeader() {
         setLoading(true);
         cleanAndRemoveToken();
         setIsAuthenticated(false);
-        window.location.href = '/';
+        
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 5000);
     }
 
     return (
