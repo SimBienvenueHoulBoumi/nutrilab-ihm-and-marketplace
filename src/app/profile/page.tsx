@@ -66,7 +66,11 @@ function Profile() {
     try {
       const { current_password, new_password } = data;
       if (userInfo) {
-        const success = await changePassword(current_password, new_password, userInfo.email);
+        const success = await changePassword(
+          current_password as string,
+          new_password as string,
+          userInfo.email
+        );
         if (success) {
           reset();
           alert('Password changed successfully!');
@@ -83,6 +87,7 @@ function Profile() {
       setLoading(false);
     }
   };
+  
 
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
