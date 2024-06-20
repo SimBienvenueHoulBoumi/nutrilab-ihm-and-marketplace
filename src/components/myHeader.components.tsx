@@ -1,9 +1,10 @@
-"use client"
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 import { isTokenHere, cleanAndRemoveToken } from '@/services/auth.service';
 import { ClipLoader } from 'react-spinners';
+import Image from 'next/image';
 
 export default function MyHeader() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,17 +22,20 @@ export default function MyHeader() {
         setLoading(true);
         cleanAndRemoveToken();
         setIsAuthenticated(false);
-        
+
         setTimeout(() => {
             window.location.href = '/';
-        }, 2500);
+        }, 1000);
     }
 
     return (
-        <div className="flex w-full justify-between py-4 bg-[#87cacc]">
-            <div className='uppercase mx-2'>Nutrilab</div>
+        <div className="flex w-full justify-between bg-[#87cacc] p-4">
+            <div className='uppercase flex items-center space-x-2'>
+                <Image src="/images/logo.png" alt="Nutrilab" width={30} height={30} />
+                <span>Nutrilab</span>
+            </div>
             {isAuthenticated ? (
-                <div className="space-x-4 mx-2 flex text-center flex-row font-black text-black text-[15px] capitalize">
+                <div className="space-x-4 flex text-center flex-row font-black text-black text-[15px] capitalize items-center">
                     <Link className='border-0 hover:text-[#6a5fc9]' href="/marketplace">Marketplace</Link>
                     <Link className='border-0 hover:text-[#6a5fc9]' href="/">Home</Link>
                     <Link className='border-0 hover:text-[#6a5fc9]' href="/profile">Profile</Link>
@@ -44,7 +48,7 @@ export default function MyHeader() {
                         {loading ? <ClipLoader color="#000" size={20} /> : 'Logout'}
                     </button>
                 </div>
-            ) : ""}
+            ) : <></>}
         </div>
     );
 }

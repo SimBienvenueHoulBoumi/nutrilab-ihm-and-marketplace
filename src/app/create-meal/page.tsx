@@ -10,7 +10,6 @@ import { createArticle } from '@/services/nutrilab.article.service';
 import { createIngredient } from '@/services/nutrilab.ingredient.service';
 import { ICreateMealForm } from '@/interfaces/meal.interface';
 import areaOptionsSelect from '@/constantes/area-select';
-import areaOptions from '@/constantes/area';
 
 const CreateMeal: React.FC = () => {
   const { register, handleSubmit, control, reset } = useForm<ICreateMealForm>({
@@ -108,7 +107,7 @@ const CreateMeal: React.FC = () => {
   return (
     <div className="h-full flex items-center justify-center px-4 py-auto sm:px-6 lg:px-8">
       <div className="w-full space-y-8">
-        <div className="bg-white m-auto w-4/12 shadow-lg rounded-md p-6">
+        <div className="bg-white m-auto max-w-64 sm:max-w-3xl shadow-lg rounded-md p-6">
           {!showIngredientForm ? (
             <>
               <h2 className="my-3 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -159,7 +158,7 @@ const CreateMeal: React.FC = () => {
                 <h3 className="text-xl font-bold text-gray-900">Ingredients</h3>
                 <div className="max-h-64 overflow-y-auto space-y-2 mb-2">
                   {fields.map((field, index) => (
-                    <div key={field.id} className="flex flex-col space-y-2 mb-2">
+                    <div key={field.id} className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
                       <CustomInput
                         label={`Ingredient ${index + 1} Name`}
                         type="text"

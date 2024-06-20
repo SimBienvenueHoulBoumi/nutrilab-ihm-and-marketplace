@@ -1,5 +1,6 @@
 'use client';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ClipLoader } from 'react-spinners';
 import ArticleDetails from '@/components/articleDetails.components';
@@ -49,36 +50,10 @@ function ProductList() {
         setSelectedArticle(null);
     };
 
-    const handleClickOutside = useCallback((event: MouseEvent) => {
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-            closeModal();
-        }
-    }, [modalRef]);
-
-    useEffect(() => {
-        if (selectedArticle) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [handleClickOutside, selectedArticle]);
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <ClipLoader color="#20847D" size={50} />
-            </div>
-        );
-    }
-
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen relative">
             <div className="flex flex-col space-y-4 px-4 sm:px-6 lg:px-8 py-2 sm:py-4 lg:py-6">
-                <div className="w-full py-2">
+                <div className="w-full">
                     <div className="flex flex-wrap gap-2 text-black">
                         {continents.map((continent, index) => (
                             <div
@@ -97,7 +72,12 @@ function ProductList() {
                 <ArticlesGrid articles={filteredArticles} setSelectedArticle={setSelectedArticle} />
             </div>
             {selectedArticle && (
-                <ArticleDetails selectedArticle={selectedArticle} closeModal={closeModal} modalRef={modalRef} />
+                <ArticleDetails
+                    selectedArticle={selectedArticle}
+                    setSelectedArticle={setSelectedArticle}
+                    closeModal={closeModal}
+                    modalRef={modalRef}
+                />
             )}
         </div>
     );
