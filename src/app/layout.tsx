@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`flex flex-col ${inter.className}`} suppressHydrationWarning={true}>
-        <div className="bg-[#DFAF2C] m-auto w-full">
+        <div className="m-auto w-full">
           <MyHeader />
         </div>
         <main className="flex-grow m-auto w-full h-full">

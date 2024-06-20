@@ -69,17 +69,17 @@ function ProductList() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center bg-gradient-to-r from-[#9bee75] to-[#DFAF2C] min-h-screen">
+            <div className="flex justify-center items-center min-h-screen">
                 <ClipLoader color="#20847D" size={50} />
             </div>
         );
     }
 
     return (
-        <div className="bg-gradient-to-r from-[#9bee75] to-[#DFAF2C] min-h-screen">
+        <div className="min-h-screen">
             <div className="flex flex-col space-y-4 px-4 sm:px-6 lg:px-8 py-2 sm:py-4 lg:py-6">
                 <div className="w-full py-2">
-                    <div className="flex flex-wrap gap-2 text-white">
+                    <div className="flex flex-wrap gap-2 text-black">
                         {continents.map((continent, index) => (
                             <div
                                 key={index}

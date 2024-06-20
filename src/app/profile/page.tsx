@@ -20,7 +20,7 @@ function Profile() {
   const [localUserId, setLocalUserId] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 5;
-  const pagesToShow = 3; // Number of pages to show before and after the current page
+  const pagesToShow = 3;
 
   useEffect(() => {
     fetchUserInfo();
@@ -92,7 +92,7 @@ function Profile() {
         <button
           key={page}
           onClick={() => paginate(page)}
-          className={`px-4 py-2 mx-1 border rounded-md ${currentPage === page ? 'bg-gray-500 text-white' : 'bg-white text-gray-700'}`}
+          className={`px-4 py-2 mx-1 border rounded-md ${currentPage === page ? 'bg-gray-500' : 'border-1 border-solid border-gray-300 text-gray-700'}`}
         >
           {page}
         </button>
@@ -120,12 +120,12 @@ function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#9bee75] to-[#DFAF2C] px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen px-4 sm:px-6 lg:px-8">
       <div className="max-w-full mx-auto py-8">
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/3 space-y-4">
             {/* User Information Card */}
-            <div className="bg-white shadow-md rounded-md p-6">
+            <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">User Information</h2>
               {userInfo ? (
                 <div className="mt-4">
@@ -138,7 +138,7 @@ function Profile() {
               )}
             </div>
             {/* Update Password Section */}
-            <div className="bg-white shadow-md rounded-md p-6">
+            <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">Update Password</h2>
               <form className="space-y-3" onSubmit={handleSubmit(onSubmitPassword)}>
                 <CustomInput
@@ -165,7 +165,7 @@ function Profile() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full rounded-md bg-[#20847D] py-2 px-4 text-sm text-white shadow-sm hover:bg-opacity-75 focus:ring-2 focus:ring-sky-400 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-full rounded-md bg-[#20847D] py-2 px-4 text-sm shadow-sm hover:bg-opacity-75 focus:ring-2 focus:ring-sky-400 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {loading ? <ClipLoader color="#fff" size={20} /> : 'Update Password'}
                 </button>
@@ -175,7 +175,7 @@ function Profile() {
 
           {/* Articles Section */}
           <div className="w-full lg:w-2/3">
-            <div className="bg-white shadow-md rounded-md p-6">
+            <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">Articles</h2>
               {articleLoading ? (
                 <ClipLoader color="#000" size={35} />
@@ -202,7 +202,7 @@ function Profile() {
                             <td className="px-6 py-4 text-sm text-gray-900">
                               <button
                                 onClick={() => handleDeleteArticle(article.id)}
-                                className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+                                className="px-3 py-1 bg-red-500 rounded-md hover:bg-red-600 focus:outline-none"
                               >
                                 Supprimer
                               </button>
@@ -216,7 +216,7 @@ function Profile() {
                     <button
                       onClick={goToPrevPage}
                       disabled={currentPage === 1}
-                      className={`px-4 py-2 mx-1 border rounded-md ${currentPage === 1 ? 'bg-gray-500 text-white cursor-not-allowed' : 'bg-white text-gray-700'}`}
+                      className={`px-4 py-2 mx-1 border rounded-md ${currentPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'border-1 border-solid border-gray-300 text-gray-700'}`}
                     >
                       Prev
                     </button>
@@ -224,7 +224,7 @@ function Profile() {
                     <button
                       onClick={goToNextPage}
                       disabled={currentPage === totalPages}
-                      className={`px-4 py-2 mx-1 border rounded-md ${currentPage === totalPages ? 'bg-gray-500 text-white cursor-not-allowed' : 'bg-white text-gray-700'}`}
+                      className={`px-4 py-2 mx-1 border rounded-md ${currentPage === totalPages ? 'bg-gray-500 cursor-not-allowed' : 'border-1 border-solid border-gray-300 text-gray-700'}`}
                     >
                       Next
                     </button>

@@ -28,13 +28,13 @@ export default function MyHeader() {
     }
 
     return (
-        <div className="flex w-full justify-between py-4">
+        <div className="flex w-full justify-between py-4 bg-[#87cacc]">
             <div className='uppercase mx-2'>Nutrilab</div>
             {isAuthenticated ? (
                 <div className="space-x-4 mx-2 flex text-center flex-row font-black text-black text-[15px] capitalize">
-                    <Link className='border-0 hover:text-[#20847D]' href="/marketplace">Marketplace</Link>
-                    <Link className='border-0 hover:text-[#20847D]' href="/">Home</Link>
-                    <Link className='border-0 hover:text-[#20847D]' href="/profile">Profile</Link>
+                    <Link className='border-0 hover:text-[#6a5fc9]' href="/marketplace">Marketplace</Link>
+                    <Link className='border-0 hover:text-[#6a5fc9]' href="/">Home</Link>
+                    <Link className='border-0 hover:text-[#6a5fc9]' href="/profile">Profile</Link>
                     <button
                         onClick={logout}
                         disabled={loading}
