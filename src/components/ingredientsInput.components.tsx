@@ -1,20 +1,22 @@
 import React from 'react';
-import { useForm, FieldArrayWithId } from 'react-hook-form';
+import { useForm, FieldArrayWithId, UseFormRegister, Path } from 'react-hook-form';
 
 import CustomInput from './myInput.components';
 import { ICreateMealForm } from '../interfaces/meal.interface';
 
-const IngredientInput: React.FC<{
+interface IngredientInputProps {
     field: FieldArrayWithId<ICreateMealForm, "ingredients", "id">;
     index: number;
-    register: ReturnType<typeof useForm<ICreateMealForm>['register']>;
+    register: UseFormRegister<ICreateMealForm>;
     remove: (index: number) => void;
-}> = ({ field, index, register, remove }) => {
+}
+
+const IngredientInput: React.FC<IngredientInputProps> = ({ field, index, register, remove }) => {
     const customInputs = [
-        { label: `Ingredient ${index + 1} Name`, name: `ingredients.${index}.name` },
-        { label: `Ingredient ${index + 1} Picture`, name: `ingredients.${index}.picture` },
-        { label: `Ingredient ${index + 1} Label Dosage`, name: `ingredients.${index}.labelDosage` },
-        { label: `Ingredient ${index + 1} Dosage`, name: `ingredients.${index}.dosage` },
+        { label: `Ingredient ${index + 1} Name`, name: `ingredients.${index}.name` as Path<ICreateMealForm> },
+        { label: `Ingredient ${index + 1} Picture`, name: `ingredients.${index}.picture` as Path<ICreateMealForm> },
+        { label: `Ingredient ${index + 1} Label Dosage`, name: `ingredients.${index}.labelDosage` as Path<ICreateMealForm> },
+        { label: `Ingredient ${index + 1} Dosage`, name: `ingredients.${index}.dosage` as Path<ICreateMealForm> },
     ];
 
     return (
@@ -24,7 +26,8 @@ const IngredientInput: React.FC<{
                     key={idx}
                     label={input.label}
                     type="text"
-                    register={register(input.name)}
+                    name={input.name}
+                    register={register}
                     required
                 />
             ))}
