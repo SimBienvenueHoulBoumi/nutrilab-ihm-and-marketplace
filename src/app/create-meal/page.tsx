@@ -105,15 +105,15 @@ const CreateMeal: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center px-4 py-auto sm:px-6 lg:px-8">
-      <div className="w-full space-y-8">
-        <div className="bg-white m-auto max-w-64 sm:max-w-3xl shadow-lg rounded-md p-6">
+    <div className="flex flex-col h-full min-h-screen justify-center px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full flex-grow space-y-4">
+        <div className="bg-white m-auto my-4 w-4/12 shadow-lg rounded-md p-6 max-h-screen overflow-y-auto">
           {!showIngredientForm ? (
             <>
-              <h2 className="my-3 text-center text-3xl font-bold tracking-tight text-gray-900">
+              <h2 className="my-3 text-center text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
                 Create a New Article
               </h2>
-              <form className="space-y-3" method="POST" onSubmit={handleSubmit(createArticleOnSubmit)}>
+              <form className="flex flex-col space-y-4" method="POST" onSubmit={handleSubmit(createArticleOnSubmit)}>
                 <CustomInput
                   label="Name"
                   type="text"
@@ -151,55 +151,53 @@ const CreateMeal: React.FC = () => {
             </>
           ) : (
             <>
-              <h2 className="my-3 text-center text-3xl font-bold tracking-tight text-gray-900">
+              <h2 className="my-3 text-center text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
                 Add Ingredients
               </h2>
-              <form className="space-y-3" method="POST" onSubmit={handleSubmit(createIngredientsOnSubmit)}>
-                <h3 className="text-xl font-bold text-gray-900">Ingredients</h3>
-                <div className="max-h-64 overflow-y-auto space-y-2 mb-2">
-                  {fields.map((field, index) => (
-                    <div key={field.id} className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
-                      <CustomInput
-                        label={`Ingredient ${index + 1} Name`}
-                        type="text"
-                        name={`ingredients.${index}.name`}
-                        register={register}
-                        required
-                      />
-                      <CustomInput
-                        label={`Ingredient ${index + 1} Picture`}
-                        type="text"
-                        name={`ingredients.${index}.picture`}
-                        register={register}
-                        required
-                      />
-                      <CustomInput
-                        label={`Ingredient ${index + 1} Label Dosage`}
-                        type="text"
-                        name={`ingredients.${index}.labelDosage`}
-                        register={register}
-                        required
-                      />
-                      <CustomInput
-                        label={`Ingredient ${index + 1} Dosage`}
-                        type="number"
-                        name={`ingredients.${index}.dosage`}
-                        register={register}
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="bg-red-500 text-white px-2 py-1 rounded"
-                        onClick={() => remove(index)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                </div>
+              <form className="space-y-4" method="POST" onSubmit={handleSubmit(createIngredientsOnSubmit)}>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">Ingredients</h3>
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex flex-col space-y-2">
+                    <CustomInput
+                      label={`Ingredient ${index + 1} Name`}
+                      type="text"
+                      name={`ingredients.${index}.name`}
+                      register={register}
+                      required
+                    />
+                    <CustomInput
+                      label={`Ingredient ${index + 1} Picture`}
+                      type="text"
+                      name={`ingredients.${index}.picture`}
+                      register={register}
+                      required
+                    />
+                    <CustomInput
+                      label={`Ingredient ${index + 1} Label Dosage`}
+                      type="text"
+                      name={`ingredients.${index}.labelDosage`}
+                      register={register}
+                      required
+                    />
+                    <CustomInput
+                      label={`Ingredient ${index + 1} Dosage`}
+                      type="number"
+                      name={`ingredients.${index}.dosage`}
+                      register={register}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="bg-red-500 text-white px-2 py-1 my-1 rounded self-start"
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
                 <button
                   type="button"
-                  className="bg-green-500 text-white px-2 py-1 rounded"
+                  className="bg-green-500 text-white px-2 py-1 rounded self-start"
                   onClick={() => append({ name: '', picture: '', labelDosage: '', dosage: '0' })}
                 >
                   Add Ingredient

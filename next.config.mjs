@@ -14,6 +14,16 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'via.placeholder.com',
             pathname: '/**',
+          },
+          {
+            protocol: 'https',
+            hostname: 'media.istockphoto.com',
+            pathname: '/**',
+          },
+          {
+            protocol: 'https',
+            hostname: 'atlasocio.com',
+            pathname: '/**',
           }
         ],
       },
