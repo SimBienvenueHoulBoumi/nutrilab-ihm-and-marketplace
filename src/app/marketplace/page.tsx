@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ClipLoader } from 'react-spinners';
@@ -27,8 +26,25 @@ function ProductList() {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Check if default selected continent exists in the list
+        const defaultContinent = localStorage.getItem('selectedContinent');
+        const continentExists = continents.some(continent => continent.name === defaultContinent);
+
+        if (defaultContinent && continentExists) {
+            setSelectedContinent(defaultContinent);
+        } else {
+            // If default continent doesn't exist or isn't set, default to null
+            setSelectedContinent(null);
+        }
+
         fetchArticles();
     }, []);
+
+    useEffect(() => {
+        if (selectedContinent) {
+            localStorage.setItem('selectedContinent', selectedContinent);
+        }
+    }, [selectedContinent]);
 
     const fetchArticles = async () => {
         try {
@@ -58,7 +74,7 @@ function ProductList() {
                         {continents.map((continent, index) => (
                             <div
                                 key={index}
-                                className="block hover:cursor-pointer rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 hover:text-gray-700"
+                                className={`block hover:cursor-pointer rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 hover:text-gray-700 ${selectedContinent === continent.name ? 'bg-gray-100 text-gray-700' : ''}`}
                                 onClick={() => setSelectedContinent(continent.name)}
                             >
                                 {continent.name}
