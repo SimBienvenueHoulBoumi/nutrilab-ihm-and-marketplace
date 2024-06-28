@@ -1,6 +1,6 @@
 "use server";
 
-import Ingredient, { IngredientDto } from "../interfaces/ingredient.interface";
+import { Ingredient, IngredientDto } from "../interfaces/ingredient.interface";
 import { cookies } from 'next/headers';
 
 const url = process.env.NEXT_PUBLIC_EXTERNAL_API_URL;

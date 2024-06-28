@@ -1,19 +1,15 @@
-export default interface Ingredient {
+export interface Ingredient extends IngredientDto {
     id: string;
-    name: string;
-    picture: string,
-    labelDosage: string,
-    dosage: string;
     createdAt: string;
     updatedAt: string;
-}
+  }
 
-export interface IngredientDto {
+  export interface IngredientDto {
     name: string;
-    picture: string,
-    labelDosage: string,
-    dosage: number,
-}
+    picture: string;
+    labelDosage: string;
+    dosage: string;
+  }
 
 export interface IFormValues {
     mealName: string;

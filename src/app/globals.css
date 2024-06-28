@@ -11,4 +11,7 @@ html, body {
   background-color: #E3E6E6;
 }
 
+body {
+  min-width: 40ch;
+}
 

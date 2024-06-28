@@ -20,7 +20,7 @@ export default function MyHeader() {
 
     async function logout() {
         setLoading(true);
-        cleanAndRemoveToken();
+        await cleanAndRemoveToken();
         setIsAuthenticated(false);
 
         setTimeout(() => {

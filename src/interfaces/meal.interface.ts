@@ -1,12 +1,15 @@
-export default interface Meal {
-    strMeal: string;
-    strInstructions: string;
-    strMealThumb: string;
-}
+import { IngredientDto } from "./ingredient.interface";
 
 export interface ICreateMealForm {
     name: string;
     description: string;
     area: string;
-    ingredients: { name: string; picture: string; labelDosage: string; dosage: string; }[];
-}
+    ingredients: IngredientDto[];
+  }
+  
+  export interface Ingredient extends IngredientDto {
+    id?: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+  

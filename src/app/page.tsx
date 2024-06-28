@@ -108,7 +108,7 @@ export default function Page() {
         </div>
 
         {/* Promotional Banner */}
-        <div className="w-full py-12 text-center text-black bg-cover bg-center bg-[#87cacc]" style={{ backgroundImage: "url('/images/banner.jpg')" }}>
+        <div className="w-full py-12 text-center text-white bg-cover bg-center bg-[#87cacc]" style={{ backgroundImage: "url('/images/table.png')" }}>
           <h2 className="text-3xl font-bold">Do you have any ideas to share?</h2>
           <p className="mt-4">Do it without further delay.</p>
           <Link href="/create-meal" className="mt-6 inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-medium transition hover:bg-gray-200">
