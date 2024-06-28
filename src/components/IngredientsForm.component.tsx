@@ -78,7 +78,7 @@ const IngredientForm: React.FC<IngredientFormProps> = ({
           type="submit"
           className="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-opacity-50"
         >
-          Submit
+          Next
         </button>
       </div>
     </form>

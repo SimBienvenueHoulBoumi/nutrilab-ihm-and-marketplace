@@ -43,6 +43,24 @@ const continents = [
   }
 ];
 
+const discoveries = [
+  {
+    title: 'Discover New Recipes',
+    description: 'Explore a variety of recipes from around the world and expand your culinary horizons.',
+    icon: 'book-open'
+  },
+  {
+    title: 'Share Culinary Knowledge',
+    description: 'Share your cooking tips, techniques, and recipes with a community of food enthusiasts.',
+    icon: 'academic-cap'
+  },
+  {
+    title: 'Connect with Food Lovers',
+    description: 'Join a vibrant community of food lovers to exchange ideas, experiences, and inspirations.',
+    icon: 'users'
+  }
+]
+
 export default function Page() {
   return (
     <>
@@ -95,9 +113,9 @@ export default function Page() {
                   <Image
                     src={continent.image}
                     alt={continent.name}
-                    width="300"
+                    width="250"
                     height="150"
-                    className="mb-4 rounded-md w-full object-cover aspect-[1/1] block"
+                    className="mb-4 rounded-md w-full h-40 object-cover aspect-[1/1] block"
                   />
                   <h2 className="mt-4 text-xl font-bold text-gray-900">{continent.name}</h2>
                   <p className="mt-2 text-sm text-gray-600">{continent.description}</p>
@@ -126,23 +144,7 @@ export default function Page() {
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                title: 'Discover New Recipes',
-                description: 'Explore a variety of recipes from around the world and expand your culinary horizons.',
-                icon: 'book-open'
-              },
-              {
-                title: 'Share Culinary Knowledge',
-                description: 'Share your cooking tips, techniques, and recipes with a community of food enthusiasts.',
-                icon: 'academic-cap'
-              },
-              {
-                title: 'Connect with Food Lovers',
-                description: 'Join a vibrant community of food lovers to exchange ideas, experiences, and inspirations.',
-                icon: 'users'
-              }
-            ].map((item, index) => (
+            {discoveries.map((item, index) => (
               <div
                 key={index}
                 className="block rounded-xl border border-gray-300 p-8 shadow-sm transition  hover:shadow-blue-500/10 bg-white"

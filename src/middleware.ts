@@ -36,6 +36,7 @@ export const config = {
     matcher: [
         '/marketplace',
         '/profile',
+        '/create-meal',
         '/login',
         '/register',
         '/forgot-password',

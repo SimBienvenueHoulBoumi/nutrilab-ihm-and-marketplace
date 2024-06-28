@@ -16,8 +16,8 @@ const ArticlesGrid: React.FC<ArticlesGridProps> = ({ articles, setSelectedArticl
                         src="/images/salade-de-fruits.jpg"
                         alt={article.name}
                         width={300}
-                        height={400}
-                        className="w-full h-48 object-cover"
+                        height={450}
+                        className="w-full h-48 object-cover p-2"
                     />
                     <div className="p-3 flex-grow flex flex-col">
                         <h3 className="text-gray-700 font-semibold text-md mb-2">
@@ -25,28 +25,13 @@ const ArticlesGrid: React.FC<ArticlesGridProps> = ({ articles, setSelectedArticl
                         </h3>
                     </div>
                     <button
-                        className="bg-[#20847D] w-full flex justify-center py-2 text-white font-semibold transition duration-300 hover:bg-teal-500"
-                    >
-                        <svg
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            className="h-6 mr-1 text-white"
-                        >
-                            <path
-                                d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 0 0110 13a22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-                                clipRule="evenodd"
-                                fillRule="evenodd"
-                            ></path>
-                            <path
-                                d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"
-                            ></path>
-                        </svg>
-                        Save article
-                    </button>
-                    <button
                         onClick={() => setSelectedArticle(article)}
-                        className="bg-[#d1c590] w-full flex justify-center py-2 text-white font-semibold transition duration-300 hover:bg-[#e2ca5d]"
-                    > 
+                        className="bg-[#d1c590] w-full flex justify-center py-2 space-x-2 space-y-2 text-white font-semibold transition duration-300 hover:bg-[#e2ca5d]"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                        </svg>
+
                         Details
                     </button>
                 </div>
