@@ -1,5 +1,10 @@
-import React, { useEffect, useCallback } from 'react';
+"use client"
+
+import React, { useEffect, useCallback, useState } from 'react';
 import Article from '@/interfaces/article.interface';
+
+import { getIngredients } from '@/services/nutrilab.ingredient.service';
+import { Ingredient } from '@/interfaces/ingredient.interface';
 
 interface ArticleDetailsProps {
     selectedArticle: Article;
@@ -9,6 +14,8 @@ interface ArticleDetailsProps {
 }
 
 const ArticleDetails: React.FC<ArticleDetailsProps> = ({ selectedArticle, setSelectedArticle, closeModal, modalRef }) => {
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
             closeModal();
@@ -18,6 +25,10 @@ const ArticleDetails: React.FC<ArticleDetailsProps> = ({ selectedArticle, setSel
     useEffect(() => {
         if (selectedArticle) {
             document.addEventListener('mousedown', handleClickOutside);
+            (async () => {
+                const fetchedIngredients = await getIngredients(selectedArticle.id);
+                setIngredients(fetchedIngredients);
+            })();
         } else {
             document.removeEventListener('mousedown', handleClickOutside);
         }
@@ -36,9 +47,16 @@ const ArticleDetails: React.FC<ArticleDetailsProps> = ({ selectedArticle, setSel
                 >
                     &times;
                 </button>
-                <h2 className="text-2xl font-bold mb-4">{selectedArticle.name}</h2>
+                <h2 className="text-2xl font-bold mt-4">{selectedArticle.name}</h2>
                 <p className="mb-2"><strong>Description:</strong> {selectedArticle.description}</p>
                 <p className="mb-2"><strong>Area:</strong> {selectedArticle.area}</p>
+                <h2 className="text-2xl font-bold mt-4"><strong>Ingredients:</strong></h2>
+                {ingredients.map((ingredient, index) => (
+                    <div key={index} className="mb-2">
+                        <p><strong>Ingredient:</strong> {ingredient.name}</p>
+                        <p><strong>Quantity:</strong> {ingredient.dosage} {ingredient.labelDosage}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
