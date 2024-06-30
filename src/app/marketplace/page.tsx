@@ -1,4 +1,5 @@
-'use client';
+"use client"
+
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ClipLoader } from 'react-spinners';
@@ -26,14 +27,12 @@ function ProductList() {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Check if default selected continent exists in the list
         const defaultContinent = localStorage.getItem('selectedContinent');
         const continentExists = continents.some(continent => continent.name === defaultContinent);
 
         if (defaultContinent && continentExists) {
             setSelectedContinent(defaultContinent);
         } else {
-            // If default continent doesn't exist or isn't set, default to null
             setSelectedContinent(null);
         }
 
@@ -85,7 +84,22 @@ function ProductList() {
                         + add new article
                     </Link>
                 </div>
-                <ArticlesGrid articles={filteredArticles} setSelectedArticle={setSelectedArticle} />
+                {loading ? (
+                    <div className="flex justify-center items-center h-full">
+                        <ClipLoader size={50} color={"#123abc"} loading={loading} />
+                    </div>
+                ) : filteredArticles.length > 0 ? (
+                    <ArticlesGrid articles={filteredArticles} setSelectedArticle={setSelectedArticle} />
+                ) : (
+                    <div className="flex justify-center items-center h-full">
+                        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+                            <div className="mx-auto max-w-screen-sm text-center">
+                                <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">No articles found.</p>
+                                <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">Choose another category for more options.</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             {selectedArticle && (
                 <ArticleDetails
