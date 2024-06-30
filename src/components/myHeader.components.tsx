@@ -24,7 +24,7 @@ export default function MyHeader() {
 
         setTimeout(() => {
             window.location.href = '/';
-        }, 1000);
+        }, 500);
     }
 
     return (
