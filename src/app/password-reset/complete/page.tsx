@@ -30,7 +30,7 @@ export default function ResetPassword() {
     if (success) {
       setTimeout(() => {
         toast.success("Password reset successfully");
-        router.push("/login"); // Redirect to login page
+        router.push("/login");
       }, 2000);
     } else {
       toast.error("An error occurred during password reset");

@@ -4,6 +4,7 @@ import CustomInput from "../../components/myInput.components";
 import { sendPasswordResetEmail } from "../../services/auth.service";
 import React, { useState } from "react";
 import { ClipLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +16,7 @@ type IFormValues = {
 export default function VerifyEmail() {
   const { register, handleSubmit } = useForm<IFormValues>();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<IFormValues> = async (data, event) => {
     event?.preventDefault();
@@ -25,6 +27,10 @@ export default function VerifyEmail() {
       
       if (success) {
         toast.success("Email sent successfully");
+        setTimeout(() => {
+          toast.success("Password reset successfully");
+          router.push("/login");
+        }, 2000);
       } else {
         toast.error("Failed to send email. Please try again later.");
       }
