@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { resetPassword } from "@/services/auth.service";
 import CustomInput from "@/components/myInput.components";
 import { useForm } from "react-hook-form";
@@ -17,9 +17,7 @@ type IFormValues = {
 
 export default function ResetPassword() {
   const { register, handleSubmit } = useForm<IFormValues>();
-  const searchParams = useSearchParams();
-
-  const token = searchParams.get("token") as string;
+  const router = useRouter();
 
   const onSubmit = async (data: IFormValues) => {
     if (data.password !== data.confirmPassword) {
@@ -27,12 +25,12 @@ export default function ResetPassword() {
       return;
     }
 
-    const success = await resetPassword({ password: data.password, token });
+    const success = await resetPassword({ password: data.password});
 
     if (success) {
       setTimeout(() => {
         toast.success("Password reset successfully");
-        window.location.href = "/login";
+        router.push("/login"); // Redirect to login page
       }, 2000);
     } else {
       toast.error("An error occurred during password reset");

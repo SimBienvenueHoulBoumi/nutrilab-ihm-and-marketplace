@@ -10,34 +10,26 @@ import "react-toastify/dist/ReactToastify.css";
 
 type IFormValues = {
   email: string;
-  [key: string]: string | number;
 };
 
 export default function VerifyEmail() {
   const { register, handleSubmit } = useForm<IFormValues>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const onSubmit: SubmitHandler<IFormValues> = async (data, event) => {
     event?.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccessMessage(null);
 
     try {
       const success = await sendPasswordResetEmail(data.email);
+      
       if (success) {
-        setSuccessMessage("Email sent successfully");
+        toast.success("Email sent successfully");
       } else {
-        toast("An error occurred during email sending", {
-          type: "success",
-        });
+        toast.error("Failed to send email. Please try again later.");
       }
     } catch (error) {
-      toast("An error occurred during email sending", {
-        type: "error",
-      });
+      toast.error("An unexpected error occurred. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -66,14 +58,6 @@ export default function VerifyEmail() {
             required={true}
             register={register}
           />
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
-          )}
-          {successMessage && (
-            <div className="text-green-500 text-sm text-center">
-              {successMessage}
-            </div>
-          )}
           <button
             type="submit"
             disabled={loading}

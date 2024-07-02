@@ -136,8 +136,8 @@ export async function changePassword(
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        oldPassword,
-        newPassword,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
       }),
     });
 
@@ -153,31 +153,30 @@ export async function changePassword(
 
 export async function sendPasswordResetEmail(email: string) {
   try {
-    const response = await fetch(`${url}/auth/send-password-email`, {
+    await fetch(`${url}/auth/send-password-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email: email }),
     });
 
-    if (response.status === 201) {
-      return true;
-    }
-    return false;
+    return true;
   } catch (error) {
-    console.error("Error during password reset email:", error);
     return false;
   }
 }
 
 export async function resetPassword({
   password,
-  token,
 }: {
   password: string;
-  token: string;
 }): Promise<boolean> {
+  const token = cookies().get("token")?.value || "";
+  if (!token) {
+    console.error("No token found in cookies");
+    return false;
+  }
   try {
     await fetch(`${url}/auth/reset-password`, {
       method: "POST",
