@@ -47,7 +47,9 @@ const ArticleDetails: React.FC<ArticleDetailsProps> = ({ selectedArticle, setSel
                 >
                     &times;
                 </button>
-                <h2 className="text-2xl font-bold mt-4">{selectedArticle.name}</h2>
+                <h2 className="text-2xl font-bold mt-4">
+                    {selectedArticle.name}
+                </h2>
                 <p className="mb-2"><strong>Description:</strong> {selectedArticle.description}</p>
                 <p className="mb-2"><strong>Area:</strong> {selectedArticle.area}</p>
                 <h2 className="text-2xl font-bold mt-4"><strong>Ingredients:</strong></h2>

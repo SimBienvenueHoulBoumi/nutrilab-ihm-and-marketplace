@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -65,6 +65,11 @@ function ProductList() {
         setSelectedArticle(null);
     };
 
+    const addToFavorites = (article: Article) => {
+        // Ajoutez ici la logique pour gérer l'ajout aux favoris, par exemple en mettant à jour l'état ou en appelant une API.
+        console.log('Article ajouté aux favoris:', article);
+    };
+
     return (
         <div className="min-h-screen relative">
             <div className="flex flex-col space-y-4 px-4 sm:px-6 lg:px-8 py-2 sm:py-4 lg:py-6">
@@ -89,7 +94,7 @@ function ProductList() {
                         <ClipLoader size={50} color={"#123abc"} loading={loading} />
                     </div>
                 ) : filteredArticles.length > 0 ? (
-                    <ArticlesGrid articles={filteredArticles} setSelectedArticle={setSelectedArticle} />
+                    <ArticlesGrid articles={filteredArticles} setSelectedArticle={setSelectedArticle} addToFavorites={addToFavorites} />
                 ) : (
                     <div className="flex justify-center items-center h-full">
                         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">

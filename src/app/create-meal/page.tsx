@@ -1,18 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useForm, SubmitHandler, FormProvider, useFieldArray } from 'react-hook-form';
-import { ClipLoader } from 'react-spinners';
+import React, { useState, useEffect } from "react";
+import {
+  useForm,
+  SubmitHandler,
+  FormProvider,
+  useFieldArray,
+} from "react-hook-form";
+import { ClipLoader } from "react-spinners";
 
-import StepIndicator from '@/components/StepIndicator.components';
-import ArticleForm from '@/components/ArticleForm.components';
-import ConfirmationMessage from '@/components/ConfirmationMessage.component';
-import IngredientForm from '@/components/IngredientsForm.component';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { ICreateMealForm } from '@/interfaces/meal.interface';
-import { createArticle } from '@/services/nutrilab.article.service';
-import { createIngredient } from '@/services/nutrilab.ingredient.service';
-import { IngredientDto } from '@/interfaces/ingredient.interface';
+import StepIndicator from "@/components/StepIndicator.components";
+import ArticleForm from "@/components/ArticleForm.components";
+import ConfirmationMessage from "@/components/ConfirmationMessage.component";
+import IngredientForm from "@/components/IngredientsForm.component";
+
+import { ICreateMealForm } from "@/interfaces/meal.interface";
+import { createArticle } from "@/services/nutrilab.article.service";
+import { createIngredient } from "@/services/nutrilab.ingredient.service";
+import { IngredientDto } from "@/interfaces/ingredient.interface";
 
 interface ArticleResponse {
   id: string;
@@ -27,17 +35,17 @@ interface ArticleResponse {
 const CreateMeal: React.FC = () => {
   const methods = useForm<ICreateMealForm>({
     defaultValues: {
-      name: '',
-      description: '',
-      area: '',
-      ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '' }],
+      name: "",
+      description: "",
+      area: "",
+      ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "" }],
     },
   });
 
   const { control, reset } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'ingredients',
+    name: "ingredients",
   });
 
   const [loading, setLoading] = useState(false);
@@ -53,17 +61,19 @@ const CreateMeal: React.FC = () => {
     setStep(2);
   };
 
-  const onSubmitIngredientForm: SubmitHandler<ICreateMealForm> = async (data) => {
+  const onSubmitIngredientForm: SubmitHandler<ICreateMealForm> = async (
+    data
+  ) => {
     setIngredientsData(data.ingredients);
     setStep(3);
   };
 
   const restartProcess = () => {
     reset({
-      name: '',
-      description: '',
-      area: '',
-      ingredients: [{ name: '', picture: '', labelDosage: '', dosage: '' }],
+      name: "",
+      description: "",
+      area: "",
+      ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "" }],
     });
     setStep(1);
     setConfirmed(false);
@@ -73,10 +83,10 @@ const CreateMeal: React.FC = () => {
 
   const handleAddIngredient = () => {
     append({
-      name: '',
-      picture: '',
-      labelDosage: '',
-      dosage: '',
+      name: "",
+      picture: "",
+      labelDosage: "",
+      dosage: "",
     });
   };
 
@@ -96,6 +106,10 @@ const CreateMeal: React.FC = () => {
       });
       const articleId = articleResponse.id;
 
+      toast("article created successfully...", {
+        type: "success",
+      });
+
       await new Promise((resolve) => setTimeout(resolve, 5000));
 
       await Promise.all(
@@ -110,6 +124,9 @@ const CreateMeal: React.FC = () => {
               },
               articleId
             );
+            toast("ingredients created successfully...", {
+              type: "success",
+            });
           } catch (error) {
             throw new Error(`Failed to create ingredient ${ingredient.name}`);
           }
@@ -118,7 +135,9 @@ const CreateMeal: React.FC = () => {
       setConfirmed(true);
       setStep(3);
     } catch (error) {
-      setError('An error occurred while creating the article or ingredients.');
+      toast("An error occurred while creating the article or ingredients.",{
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -126,6 +145,7 @@ const CreateMeal: React.FC = () => {
 
   return (
     <div className="h-full flex items-center justify-center px-4 py-auto lg:px-4">
+      <ToastContainer />
       <div className="bg-white m-auto sm:w-7/12 w-screen shadow-lg rounded-md p-3">
         <StepIndicator step={step} confirmed={confirmed} />
         <div className="w-full justify-center flex-grow space-y-4">
