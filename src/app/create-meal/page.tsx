@@ -18,7 +18,10 @@ import ConfirmationMessage from "@/components/ConfirmationMessage.component";
 import IngredientForm from "@/components/IngredientsForm.component";
 
 import { ICreateMealForm } from "@/interfaces/meal.interface";
-import { createArticle } from "@/services/nutrilab.article.service";
+import {
+  createArticle,
+  getArticles,
+} from "@/services/nutrilab.article.service";
 import { createIngredient } from "@/services/nutrilab.ingredient.service";
 import { IngredientDto } from "@/interfaces/ingredient.interface";
 
@@ -99,12 +102,17 @@ const CreateMeal: React.FC = () => {
     setError(null);
 
     try {
-      const articleResponse: ArticleResponse = await createArticle({
+      await createArticle({
         name: articleData!.name,
         description: articleData!.description,
         area: articleData!.area,
       });
-      const articleId = articleResponse.id;
+
+      const newArticle = (await getArticles()).filter(
+        (article) => article.name === articleData!.name
+      )[0];
+
+      const articleId = newArticle.id;
 
       toast("article created successfully...", {
         type: "success",
@@ -135,7 +143,7 @@ const CreateMeal: React.FC = () => {
       setConfirmed(true);
       setStep(3);
     } catch (error) {
-      toast("An error occurred while creating the article or ingredients.",{
+      toast("An error occurred while creating the article or ingredients.", {
         type: "error",
       });
     } finally {
