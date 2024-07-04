@@ -37,7 +37,7 @@ export async function getIngredients(articleId: string): Promise<Ingredient[]> {
     }
 }
 
-export async function createIngredient(ingredient: IngredientDto, articleId: string): Promise<Ingredient> {
+export async function createIngredient(ingredient: IngredientDto, articleId: string): Promise<String> {
     const token = cookies().get('token')?.value || "";
 
     try {
@@ -59,10 +59,9 @@ export async function createIngredient(ingredient: IngredientDto, articleId: str
         }
 
         if (contentType && contentType.includes('application/json')) {
-            const data = await response.json();
-            return data as Ingredient;
+            return await response.text();
         } else {
-            throw new Error('Response is not JSON');
+            throw new Error('Response error');
         }
     } catch (error: unknown) {
         if (error instanceof Error) {
@@ -117,11 +116,7 @@ export async function deleteIngredient(articleId: string, ingredientId: string):
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw new Error(`An error occurred while deleting the ingredient: ${error.message}`);
-        } else {
-            throw new Error('An unknown error occurred while deleting the ingredient.');
-        }
+    } catch (error: any) {
+        throw new Error(`Failed to delete ingredient: ${error.message}`);
     }
 }
