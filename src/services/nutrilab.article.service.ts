@@ -45,29 +45,37 @@ export async function getArticles(): Promise<Article[]> {
   }
 }
 
-export async function createArticle(article: ArticleDto): Promise<string> {
-  const token = cookies().get("token")?.value || "";
+export async function createArticle(article: ArticleDto): Promise<void> {
+  try {
+    const token = cookies().get("token")?.value || "";
 
-  const response = await fetch(`${url}/articles`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(article),
-  });
+    if (!token) {
+      throw new Error("No token found in cookies");
+    }
 
-  if ((await response.text()) != "article created") {
-    const errorText = await response.text();
-    throw new Error(`Network response was not ok: ${errorText}`);
+    const response = await fetch(`${url}/articles`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(article),
+    });
+
+    if ((await response.text()) != "article created") {
+      const errorText = await response.text();
+      throw new Error(`Network response was not ok: ${errorText}`);
+    }
+  } catch (error: any) {
+    console.error("Failed to create article:", error);
+    throw new Error(`Failed to create article: ${error.message}`);
   }
-
-  return await response.text();
 }
+
 
 export async function deleteArticle(id: string): Promise<void> {
   const token = cookies().get("token")?.value || "";
-  
+
   const response = await fetch(`${url}/articles/${id}`, {
     method: "DELETE",
     headers: {

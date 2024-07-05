@@ -6,7 +6,7 @@ import { IngredientDto } from '@/interfaces/ingredient.interface';
 
 interface ConfirmationMessageProps {
   onRestart: () => void;
-  onConfirm: () => Promise<void>; // Assurez-vous que le type de retour est bien une Promise<void>
+  onConfirm: () => Promise<void>;
   articleData: ICreateMealForm | null;
   ingredientsData: IngredientDto[];
 }
@@ -26,7 +26,7 @@ const ConfirmationMessage: React.FC<ConfirmationMessageProps> = ({ onRestart, on
   return (
     <div className="p-4">
       <div className="text-center">
-        <p className="text-lg font-semibold mb-4">Article Created Successfully!</p>
+        <p className="text-lg font-semibold mb-4">let&apos;s recap our article!</p>
         {articleData && (
           <div className="mb-4">
             <h2 className="text-xl font-semibold">Article Details:</h2>

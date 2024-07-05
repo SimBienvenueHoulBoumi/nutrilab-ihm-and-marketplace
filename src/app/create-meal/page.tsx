@@ -132,16 +132,23 @@ const CreateMeal: React.FC = () => {
               },
               articleId
             );
-            toast("ingredients created successfully...", {
-              type: "success",
-            });
           } catch (error) {
             throw new Error(`Failed to create ingredient ${ingredient.name}`);
           }
+          toast("ingredients created successfully...", {
+            type: "success",
+          });
         })
       );
       setConfirmed(true);
       setStep(3);
+
+      setTimeout(() => {
+        toast("article created successfully", {
+          type: "success",
+        });
+        window.location.href = "/marketplace";
+      }, 2000);
     } catch (error) {
       toast("An error occurred while creating the article or ingredients.", {
         type: "error",
