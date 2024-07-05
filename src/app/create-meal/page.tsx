@@ -159,7 +159,7 @@ const CreateMeal: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center px-4 py-auto lg:px-4">
+    <div className="h-full flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
       <ToastContainer />
       <div className="bg-white m-auto sm:w-7/12 w-screen shadow-lg rounded-md p-3">
         <StepIndicator step={step} confirmed={confirmed} />

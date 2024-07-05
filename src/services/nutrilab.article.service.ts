@@ -45,13 +45,14 @@ export async function getArticles(): Promise<Article[]> {
   }
 }
 
-export async function createArticle(article: ArticleDto): Promise<void> {
-  try {
-    const token = cookies().get("token")?.value || "";
+export async function createArticle(article: ArticleDto): Promise<String> {
+  const token = cookies().get("token")?.value || "";
 
-    if (!token) {
-      throw new Error("No token found in cookies");
-    }
+  if (!token) {
+    throw new Error("No token found in cookies");
+  }
+
+  try {
 
     const response = await fetch(`${url}/articles`, {
       method: "POST",
@@ -62,10 +63,12 @@ export async function createArticle(article: ArticleDto): Promise<void> {
       body: JSON.stringify(article),
     });
 
-    if ((await response.text()) != "article created") {
+    if ((await response.status) !== 201) {
       const errorText = await response.text();
       throw new Error(`Network response was not ok: ${errorText}`);
     }
+
+    return await response.text();
   } catch (error: any) {
     console.error("Failed to create article:", error);
     throw new Error(`Failed to create article: ${error.message}`);
