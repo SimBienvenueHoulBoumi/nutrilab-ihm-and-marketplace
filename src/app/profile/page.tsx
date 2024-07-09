@@ -104,12 +104,12 @@ function Profile() {
         }
       } else {
         toast("User information not available. Please refresh and try again.", {
-          type: "error"
+          type: "error",
         });
       }
     } catch (error: any) {
       toast("Failed to change password. Please try again.", {
-        type: "error"
+        type: "error",
       });
     } finally {
       setLoading(false);
@@ -296,6 +296,7 @@ function Profile() {
                             Area
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500"></th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -316,6 +317,11 @@ function Profile() {
                                 onClick={() => handleDeleteArticle(article.id)}
                               >
                                 Delete
+                              </button>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900 space-x-2">
+                              <button className="px-2 py-1 text-xs text-green-600 border border-green-600 rounded hover:bg-green-600 hover:text-white">
+                                Details
                               </button>
                             </td>
                           </tr>
