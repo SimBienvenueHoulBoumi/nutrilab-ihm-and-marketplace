@@ -1,8 +1,5 @@
 "use client";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ClipLoader } from "react-spinners";
@@ -13,12 +10,20 @@ import {
 } from "@/services/nutrilab.article.service";
 import Article from "@/interfaces/article.interface";
 import User from "@/interfaces/user.interface";
-
 import {
   getUserInfo,
   getLocalUserId,
   changePassword,
 } from "@/services/auth.service";
+import FavoritesSection from "@/components/favoriteSession.components";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+type IFormValues = {
+  email: string;
+  password: string;
+  [key: string]: string;
+};
 
 function Profile() {
   const {
@@ -26,23 +31,16 @@ function Profile() {
     handleSubmit,
     reset,
     formState: { errors },
-    watch,
-    setError,
   } = useForm<IFormValues>();
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
   const [articleLoading, setArticleLoading] = useState(false);
   const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [localUserId, setLocalUserId] = useState<string>("");
+  const [localUserId, setLocalUserId] = useState<string | null>(null); // Initialize as null
+
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 5;
   const pagesToShow = 3;
-
-  type IFormValues = {
-    email: string;
-    password: string;
-    [key: string]: string;
-  };
 
   useEffect(() => {
     fetchUserInfo();
@@ -74,7 +72,7 @@ function Profile() {
   const fetchLocalUserId = async () => {
     try {
       const userId = await getLocalUserId();
-      setLocalUserId(userId);
+      setLocalUserId(userId); // Set localUserId when fetched successfully
     } catch (error) {
       console.error("Error fetching local user ID:", error);
     }
@@ -177,13 +175,20 @@ function Profile() {
     }
   };
 
+  if (localUserId === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <ClipLoader color="#000" size={35} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen px-4 sm:px-6 lg:px-8">
       <ToastContainer />
       <div className="max-w-full mx-auto py-8">
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/3 space-y-4">
-            {/* User Information Card */}
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">
                 User Information
@@ -201,60 +206,44 @@ function Profile() {
                   </p>
                 </div>
               ) : (
-                <p>Loading user information...</p>
+                <p className="text-gray-700 text-lg">Loading...</p>
               )}
             </div>
-            {/* Update Password Section */}
+
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">
-                Update Password
+                Change Password
               </h2>
               <form
-                className="space-y-3"
                 onSubmit={handleSubmit(onSubmitChangePassword)}
+                className="mt-4 space-y-4"
               >
-                <div>
-                  <CustomInput
-                    label="Current Password"
-                    name="current_password"
-                    type="password"
-                    register={register}
-                    required
-                  />
-                  {errors.current_password && (
-                    <p className="text-red-600 text-sm">
-                      Current password is required.
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <CustomInput
-                    label="New Password"
-                    name="new_password"
-                    type="password"
-                    register={register}
-                    required
-                  />
-                  {errors.new_password && (
-                    <p className="text-red-600 text-sm">
-                      {errors.new_password.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <CustomInput
-                    label="Confirm Password"
-                    name="confirm_password"
-                    type="password"
-                    register={register}
-                    required
-                  />
-                  {errors.confirm_password && (
-                    <p className="text-red-600 text-sm">
-                      {errors.confirm_password.message}
-                    </p>
-                  )}
-                </div>
+                <CustomInput
+                  type="password"
+                  label="Current Password"
+                  name="current_password"
+                  register={register}
+                  required
+                />
+                <CustomInput
+                  type="password"
+                  label="New Password"
+                  name="new_password"
+                  register={register}
+                  required
+                />
+                <CustomInput
+                  type="password"
+                  label="Confirm New Password"
+                  name="confirm_password"
+                  register={register}
+                  required
+                />
+                {errors.confirm_password && (
+                  <p className="text-red-600 text-sm">
+                    {errors.confirm_password.message}
+                  </p>
+                )}
                 <button
                   type="submit"
                   disabled={loading}
@@ -272,8 +261,7 @@ function Profile() {
             </div>
           </div>
 
-          {/* Articles Section */}
-          <div className="w-full lg:w-2/3">
+          <div className="w-full lg:w-2/3 space-y-2">
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
               <h2 className="text-3xl font-bold text-gray-900">Articles</h2>
               {articleLoading ? (
@@ -281,7 +269,9 @@ function Profile() {
               ) : (
                 <>
                   {currentArticles.length === 0 ? (
-                    <p className="text-gray-700 text-lg">Aucun article créé.</p>
+                    <p className="text-gray-700 text-lg">
+                      No articles created.
+                    </p>
                   ) : (
                     <table className="w-full mt-4">
                       <thead>
@@ -356,6 +346,7 @@ function Profile() {
                 </>
               )}
             </div>
+            {localUserId && <FavoritesSection localUserId={localUserId} />}
           </div>
         </div>
       </div>

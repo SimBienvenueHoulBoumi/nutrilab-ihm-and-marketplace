@@ -86,7 +86,7 @@ const ProductList: React.FC<ProductListProps> = ({}) => {
         console.log("Added to favorites:", article.name);
       } else {
         console.log("Remove from favorite", articleId);
-        const favoriteToDelete = await findOneFavorite(articleId, articleId); // Assuming you have a function to find the favorite ID
+        const favoriteToDelete = await findOneFavorite(articleId);
         if (favoriteToDelete) {
           await deleteFavorite(favoriteToDelete.id);
           console.log("Removed from favorites:", favoriteToDelete.name);

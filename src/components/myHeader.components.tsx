@@ -34,7 +34,7 @@ export default function MyHeader() {
                 <span>Nutrilab</span>
             </div>
             {isAuthenticated ? (
-                <div className="space-x-4 py-2 flex text-center flex-row font-black text-black text-[15px] capitalize items-center">
+                <div className="space-x-4 py-1 flex text-center flex-row font-black text-black text-[15px] capitalize items-center">
                     <Link className="border-0 hover:text-[#6a5fc9]" href="/marketplace">
                         <div className="flex items-center space-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 block sm:hidden">

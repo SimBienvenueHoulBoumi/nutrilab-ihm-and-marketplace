@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 const url = process.env.NEXT_PUBLIC_EXTERNAL_API_URL;
 
-export async function getFavorites(articleId: String): Promise<Favorite[]> {
+export async function getFavorites(): Promise<Favorite[]> {
   const token = cookies().get("token")?.value || "";
   if (!token) {
     console.error("No token found in cookies");
@@ -12,8 +12,8 @@ export async function getFavorites(articleId: String): Promise<Favorite[]> {
   }
 
   try {
-    const response = await fetch(`${url}/favorites/${articleId}`, {
-      method: "POST",
+    const response = await fetch(`${url}/favorites`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -46,7 +46,6 @@ export async function getFavorites(articleId: String): Promise<Favorite[]> {
 
 export async function findOneFavorite(
   id: string,
-  articleId: string
 ): Promise<Favorite> {
   const token = cookies().get("token")?.value || "";
   if (!token) {
@@ -55,17 +54,13 @@ export async function findOneFavorite(
   }
 
   try {
-    const response = await fetch(`${url}/favorites/${articleId}/${id}`, {
+    const response = await fetch(`${url}/favorites/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-
-    if (response.status !== 200) {
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
 
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
@@ -95,18 +90,17 @@ export async function addFavorite(
   }
 
   try {
-    const response = await fetch(`${url}/favorites/${articleId}`, {
+    await fetch(`${url}/favorites/${articleId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(favoriteDto),
+      body: JSON.stringify({
+        name: favoriteDto.name,
+      }),
     });
 
-    if (response.status !== 200) {
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Failed to add favorite:", error.message);
@@ -124,17 +118,13 @@ export async function deleteFavorite(favoriteId: String): Promise<void> {
   }
 
   try {
-    const response = await fetch(`${url}/favorites/${favoriteId}`, {
+    await fetch(`${url}/favorites/${favoriteId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-
-    if (response.status !== 200) {
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Failed to delete favorite:", error.message);
