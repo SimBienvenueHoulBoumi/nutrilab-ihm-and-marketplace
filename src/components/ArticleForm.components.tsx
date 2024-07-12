@@ -13,7 +13,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ onSubmit }) => {
   const { handleSubmit, register } = useFormContext<ICreateMealForm>();
 
   const onSubmitForm: SubmitHandler<ICreateMealForm> = (data) => {
-    onSubmit(data); // Pass the submitted data to the parent component
+    onSubmit(data);
   };
 
   return (

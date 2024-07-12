@@ -36,7 +36,7 @@ function Profile() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [articleLoading, setArticleLoading] = useState(false);
   const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [localUserId, setLocalUserId] = useState<string | null>(null); // Initialize as null
+  const [localUserId, setLocalUserId] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 5;
@@ -72,7 +72,7 @@ function Profile() {
   const fetchLocalUserId = async () => {
     try {
       const userId = await getLocalUserId();
-      setLocalUserId(userId); // Set localUserId when fetched successfully
+      setLocalUserId(userId); 
     } catch (error) {
       console.error("Error fetching local user ID:", error);
     }

@@ -9,10 +9,11 @@ import {
   addFavorite,
   deleteFavorite,
 } from "@/services/nutrilab.favorite.service";
+import Favorite from "@/interfaces/favorite.interface";
 
 interface ArticlesGridProps {
   articles: Article[];
-  setSelectedArticle: (article: Article | null) => void;
+  setSelectedArticle: (article: Article) => void;
 }
 
 const ArticlesGrid: React.FC<ArticlesGridProps> = ({
@@ -24,10 +25,11 @@ const ArticlesGrid: React.FC<ArticlesGridProps> = ({
   useEffect(() => {
     async function fetchFavorites() {
       try {
-        const favs = await getFavorites();
-        setFavorites(favs.map((fav: any) => fav.articleId));
+        const favs: Favorite[] = await getFavorites();
+        setFavorites(Array.isArray(favs) ? favs.map((fav: Favorite) => fav.articleId) : []);
       } catch (error) {
         console.error("Failed to fetch favorites:", error);
+        setFavorites([]);
       }
     }
     fetchFavorites();

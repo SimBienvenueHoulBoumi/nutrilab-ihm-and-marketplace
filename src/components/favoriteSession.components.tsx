@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ClipLoader } from "react-spinners";
 
 import {
   getFavorites,
@@ -20,10 +19,8 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
   }, []);
 
   const fetchFavorites = async () => {
-    console.log("Fetching all favorites...");
     setLoading(true);
     try {
-      console.log(await getFavorites(), "Fetched favorites");
       setFavorites(await getFavorites());
     } catch (error) {
       console.error("Error fetching favorites:", error);
@@ -37,9 +34,8 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
     try {
       await deleteFavorite(favoriteId);
       toast("Favorite deleted successfully", { type: "success" });
-      fetchFavorites(); // Re-fetch favorites after deletion
+      fetchFavorites(); 
     } catch (error) {
-      console.error("Error deleting favorite:", error);
       toast("Error deleting favorite", { type: "error" });
     }
   };
