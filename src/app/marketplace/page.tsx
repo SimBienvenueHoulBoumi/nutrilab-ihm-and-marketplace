@@ -133,7 +133,6 @@ const ProductList: React.FC<ProductListProps> = ({}) => {
           <ArticlesGrid
             articles={filteredArticles}
             setSelectedArticle={setSelectedArticle}
-            addToFavorites={addToFavorites}
           />
         ) : (
           <div className="flex justify-center items-center h-full">

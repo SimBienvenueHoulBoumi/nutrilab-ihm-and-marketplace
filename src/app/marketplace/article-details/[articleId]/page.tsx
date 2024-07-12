@@ -9,11 +9,14 @@ import { Ingredient } from "@/interfaces/ingredient.interface";
 import {
   addFavorite,
   findOneFavorite,
+  getFavorites,
 } from "@/services/nutrilab.favorite.service";
-import { FavoriteDto } from "@/interfaces/favorite.interface";
+import Favorite, { FavoriteDto } from "@/interfaces/favorite.interface";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
+
+import { getLocalUserId } from "@/services/auth.service";
 
 interface ArticleDetailProps {
   params: {
@@ -25,19 +28,28 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
   const { articleId } = params;
   const [article, setArticle] = useState<Article | null>(null);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [isFavorite, setIsFavorite] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedArticle = await getArticleById(articleId);
         const fetchedIngredients = await getIngredients(articleId);
-        const favorite = await findOneFavorite(articleId);
+        const userId = await getLocalUserId();
+
+        let fetchedFavorites = await getFavorites();
+        if (!Array.isArray(fetchedFavorites)) {
+          fetchedFavorites = [];
+        }
+
+        const filteredFavorites = fetchedFavorites.filter(
+          (favorite: Favorite) => favorite.userId === userId
+        );
 
         setArticle(fetchedArticle);
         setIngredients(fetchedIngredients);
-        setIsFavorite(!!favorite);
+        setFavorites(filteredFavorites);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -58,17 +70,35 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
 
   const handleAddToFavorite = async () => {
     if (article) {
-      const favorite: FavoriteDto = {
-        name: article.name,
-      };
       try {
-        await addFavorite(article.id, favorite);
-        toast("Article added to favorites", {
-          type: "success",
-        });
-        setIsFavorite(true);
+        const favorite = await findOneFavorite(articleId);
+        if (favorite.userId === (await getLocalUserId())) {
+          toast("Article is already in favorites", { type: "info" });
+        } else {
+          const favoriteDto: FavoriteDto = {
+            name: article.name,
+          };
+
+          await addFavorite(articleId, favoriteDto);
+          toast("Article added to favorites", { type: "success" });
+
+          const addedFavorite = await findOneFavorite(articleId);
+          if (addedFavorite) {
+            const newFavorite: Favorite = {
+              id: addedFavorite.id,
+              articleId: articleId,
+              userId: await getLocalUserId(),
+              name: article.name,
+            };
+
+            setFavorites([...favorites, newFavorite]);
+          } else {
+            console.error("Failed to retrieve added favorite");
+          }
+        }
       } catch (error) {
         console.error("Error adding article to favorites:", error);
+        toast("Error adding article to favorites", { type: "error" });
       }
     }
   };
@@ -81,15 +111,17 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
             <div className="px-4 py-5 sm:px-6">
               <button
-                onClick={handleAddToFavorite}
+                onClick={() => handleAddToFavorite()}
                 className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                  isFavorite
+                  favorites.some((fav) => fav.articleId === articleId)
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 }`}
-                disabled={isFavorite}
+                disabled={favorites.some((fav) => fav.articleId === articleId)}
               >
-                {isFavorite ? "Added to Favorite" : "Add to Favorite"}
+                {favorites.some((fav) => fav.articleId === articleId)
+                  ? "Added to Favorite"
+                  : "Add to Favorite"}
               </button>
               <h1 className="text-2xl font-bold text-gray-900 mt-4">
                 Article Details

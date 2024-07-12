@@ -273,51 +273,34 @@ function Profile() {
                       No articles created.
                     </p>
                   ) : (
-                    <table className="w-full mt-4">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                            Name
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                            Description
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                            Area
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500"></th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentArticles.map((article) => (
-                          <tr key={article.id} className="bg-white">
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                              {article.name}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                              {article.description}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                              {article.area}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900 space-x-2">
-                              <button
-                                className="px-2 py-1 text-xs text-red-600 border border-red-600 rounded hover:bg-red-600 hover:text-white"
-                                onClick={() => handleDeleteArticle(article.id)}
-                              >
-                                Delete
-                              </button>
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900 space-x-2">
-                              <button className="px-2 py-1 text-xs text-green-600 border border-green-600 rounded hover:bg-green-600 hover:text-white">
-                                Details
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <ul className="space-y-4">
+                      {currentArticles.map((article) => (
+                        <li
+                          key={article.id}
+                          className="flex items-center justify-between border-b border-gray-300 py-2"
+                        >
+                          <h3 className="text-lg font-semibold">
+                            {article.name}
+                          </h3>
+                          <div className="flex justify-end space-x-2">
+                            <button
+                              onClick={() => handleDeleteArticle(article.id)}
+                              className="text-red-600 text-xs"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              className="text-green-600 text-xs"
+                              onClick={() =>
+                                (window.location.href = `/marketplace/article-details/${article.id}`)
+                              }
+                            >
+                              Details
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                   {/* Pagination */}
                   <div className="mt-4 flex justify-center">
@@ -346,7 +329,7 @@ function Profile() {
                 </>
               )}
             </div>
-            {localUserId && <FavoritesSection localUserId={localUserId} />}
+            {localUserId && <FavoritesSection />}
           </div>
         </div>
       </div>

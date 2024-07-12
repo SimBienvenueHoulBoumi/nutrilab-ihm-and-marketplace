@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,11 +9,9 @@ import {
 } from "@/services/nutrilab.favorite.service";
 import Favorite from "@/interfaces/favorite.interface";
 
-interface FavoritesSectionProps {
-  localUserId: string;
-}
+interface FavoritesSectionProps {}
 
-const FavoritesSection: React.FC<FavoritesSectionProps> = ({ localUserId }) => {
+const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -24,14 +20,11 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({ localUserId }) => {
   }, []);
 
   const fetchFavorites = async () => {
-    console.log("Fetching favorites...", localUserId);
+    console.log("Fetching all favorites...");
     setLoading(true);
     try {
-      console.log("fetching favorites", await getFavorites());
-      const fetchedFavorites = await getFavorites();
-      console.log("fetchedFavorites:", fetchedFavorites);
-      setFavorites(fetchedFavorites);
-      console.log("favorites:", favorites);
+      console.log(await getFavorites(), "Fetched favorites");
+      setFavorites(await getFavorites());
     } catch (error) {
       console.error("Error fetching favorites:", error);
       toast("Error fetching favorites", { type: "error" });
@@ -43,46 +36,54 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({ localUserId }) => {
   const handleDeleteFavorite = async (favoriteId: string) => {
     try {
       await deleteFavorite(favoriteId);
-      fetchFavorites(); // Fetch favorites again after deletion
       toast("Favorite deleted successfully", { type: "success" });
+      fetchFavorites(); // Re-fetch favorites after deletion
     } catch (error) {
       console.error("Error deleting favorite:", error);
       toast("Error deleting favorite", { type: "error" });
     }
   };
 
+  const goToDetails = (articleId: string) => {
+    window.location.href = `/marketplace/article-details/${articleId}`;
+  };
+
   return (
-    <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
-      <h2 className="text-3xl font-bold text-gray-900">Favorites</h2>
+    <div>
       <ToastContainer />
       {loading ? (
-        <ClipLoader color="#000" size={35} />
-      ) : favorites.length === 0 ? (
-        <p className="text-gray-700 text-lg">No favorites found.</p>
-      ) : (
-        <ul className="mt-4 space-y-2">
-          {favorites
-          .filter(
-             (favorite) => favorite.userId === localUserId
-  
-          )
-          .map((favorite) => (
-            <li
-              key={favorite.id}
-              className="flex items-center justify-between border-b border-gray-300 py-2"
-            >
-              <div>
-                <p className="text-sm font-semibold">{favorite.name}</p>
-              </div>
-              <button
-                className="text-red-600 text-xs"
-                onClick={() => handleDeleteFavorite(favorite.id)}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+        <></>
+      ) : favorites.length === 0 ? null : (
+        <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
+          <h2 className="text-3xl font-bold text-gray-900">Favorites</h2>
+          <ul className="mt-4 space-y-2">
+            {favorites.length > 0 &&
+              favorites.map((favorite) => (
+                <li
+                  key={favorite.id}
+                  className="flex items-center justify-between border-b border-gray-300 py-2"
+                >
+                  <div>
+                    <p className="text-sm font-semibold">{favorite.name}</p>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      className="text-red-600 text-xs"
+                      onClick={() => handleDeleteFavorite(favorite.id)}
+                    >
+                      delete
+                    </button>
+                    <button
+                      className="text-green-600 text-xs"
+                      onClick={() => goToDetails(favorite.articleId)}
+                    >
+                      Details
+                    </button>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
       )}
     </div>
   );

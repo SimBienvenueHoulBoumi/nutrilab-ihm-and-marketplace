@@ -3,37 +3,58 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Article from "@/interfaces/article.interface";
+import {
+  getFavorites,
+  findOneFavorite,
+  addFavorite,
+  deleteFavorite,
+} from "@/services/nutrilab.favorite.service";
 
 interface ArticlesGridProps {
   articles: Article[];
   setSelectedArticle: (article: Article | null) => void;
-  addToFavorites: (articleId: string, isFavorite: boolean) => void;
 }
 
 const ArticlesGrid: React.FC<ArticlesGridProps> = ({
   articles,
   setSelectedArticle,
-  addToFavorites,
 }) => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
-  const handleFavoriteClick = (articleId: string) => {
-    setFavorites((prevFavorites) => {
-      if (prevFavorites.includes(articleId)) {
-        return prevFavorites.filter((id) => id !== articleId);
-      } else {
-        return [...prevFavorites, articleId];
+  useEffect(() => {
+    async function fetchFavorites() {
+      try {
+        const favs = await getFavorites();
+        setFavorites(favs.map((fav: any) => fav.articleId));
+      } catch (error) {
+        console.error("Failed to fetch favorites:", error);
       }
-    });
-    addToFavorites(articleId, !favorites.includes(articleId));
+    }
+    fetchFavorites();
+  }, []);
+
+  const toggleFavorite = async (articleId: string) => {
+    try {
+      const existingFavorite = await findOneFavorite(articleId);
+
+      if (existingFavorite) {
+        await deleteFavorite(existingFavorite.id);
+        setFavorites((prevFavorites) =>
+          prevFavorites.filter((favId) => favId !== articleId)
+        );
+      } else {
+        await addFavorite(articleId, {
+          name: articleId,
+        });
+        setFavorites((prevFavorites) => [...prevFavorites, articleId]);
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+    }
   };
 
-  useEffect(() => {
-    console.log("favorites:", favorites);
-  }, [favorites]);
-
   const goToDetails = (id: string) => {
-    window.location.href = "/marketplace/article-details/" + id;
+    window.location.href = `/marketplace/article-details/${id}`;
   };
 
   return (
@@ -47,7 +68,7 @@ const ArticlesGrid: React.FC<ArticlesGridProps> = ({
           >
             <div className="relative">
               <Image
-                src="/images/salade-de-fruits.jpg"
+                src="/images/salade-de-fruits.jpg" // Replace with article image source
                 alt={article.name}
                 width={300}
                 height={450}
@@ -55,15 +76,15 @@ const ArticlesGrid: React.FC<ArticlesGridProps> = ({
                 className="w-full h-48 object-cover p-2 hover:cursor-pointer"
                 onClick={() => goToDetails(article.id)}
               />
-              <button
-                onClick={() => handleFavoriteClick(article.id)}
+              <div
                 className={`absolute p-2 top-2 right-2 bg-transparent border-none cursor-pointer z-10 transition duration-300`}
+                onClick={() => toggleFavorite(article.id)}
               >
                 <svg
                   className="w-6 h-6"
                   viewBox="0 0 24 24"
-                  fill={isFavorite ? "red" : "none"}
-                  stroke={isFavorite ? "red" : "currentColor"}
+                  fill={isFavorite ? "yellow" : "none"}
+                  stroke={isFavorite ? "yellow" : "currentColor"}
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -73,7 +94,7 @@ const ArticlesGrid: React.FC<ArticlesGridProps> = ({
                     strokeLinejoin="round"
                   />
                 </svg>
-              </button>
+              </div>
             </div>
             <div className="p-3 flex-grow flex flex-col">
               <h3 className="text-gray-700 font-semibold text-md mb-2">
