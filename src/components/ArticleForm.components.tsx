@@ -33,6 +33,13 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ onSubmit }) => {
           register={register}
           required
         />
+        <CustomInput
+          label="Article Preparation"
+          name="preparation"
+          type="textarea"
+          register={register}
+          required
+        />
         <CustomSelect
           label="Area"
           name="area"

@@ -4,6 +4,7 @@ export default interface Article {
     description: string;
     area: string;
     userId: string;
+    preparation: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -11,5 +12,6 @@ export default interface Article {
 export interface ArticleDto {
     name: string;
     description: string;
+    preparation: string;
     area: string;
 }

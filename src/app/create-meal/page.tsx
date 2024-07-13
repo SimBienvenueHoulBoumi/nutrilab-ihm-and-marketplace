@@ -76,7 +76,7 @@ const CreateMeal: React.FC = () => {
       name: "",
       description: "",
       area: "",
-      ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "" }],
+      ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "", }],
     });
     setStep(1);
     setConfirmed(false);
@@ -106,6 +106,7 @@ const CreateMeal: React.FC = () => {
         name: articleData!.name,
         description: articleData!.description,
         area: articleData!.area,
+        preparation: articleData!.preparation
       });
 
       const newArticle = (await getArticles()).filter(

@@ -164,6 +164,12 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
                     )}
                   </dd>
                 </div>
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Preparation</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    {article?.preparation}
+                  </dd>
+                </div>
               </dl>
             </div>
             <div className="hidden md:block">

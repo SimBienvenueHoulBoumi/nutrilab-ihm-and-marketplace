@@ -72,33 +72,6 @@ const ProductList: React.FC<ProductListProps> = ({}) => {
     setSelectedArticle(null);
   };
 
-  const addToFavorites = async (articleId: string, isFavorite: boolean) => {
-    try {
-      if (isFavorite) {
-        const article = articles.find((article) => article.id === articleId);
-        if (!article) {
-          throw new Error("Article not found");
-        }
-        const favoriteDto: FavoriteDto = {
-          name: article.name,
-        };
-        await addFavorite(articleId, favoriteDto);
-        console.log("Added to favorites:", article.name);
-      } else {
-        console.log("Remove from favorite", articleId);
-        const favoriteToDelete = await findOneFavorite(articleId);
-        if (favoriteToDelete) {
-          await deleteFavorite(favoriteToDelete.id);
-          console.log("Removed from favorites:", favoriteToDelete.name);
-        } else {
-          console.log("Favorite not found for deletion");
-        }
-      }
-    } catch (error) {
-      console.error("Failed to add/remove favorite:", error);
-    }
-  };
-
   return (
     <div className="min-h-screen relative">
       <div className="flex flex-col space-y-4 px-4 sm:px-6 lg:px-8 py-2 sm:py-4 lg:py-6">

@@ -4,6 +4,7 @@ export interface ICreateMealForm {
     name: string;
     description: string;
     area: string;
+    preparation: string;
     ingredients: IngredientDto[];
   }
   

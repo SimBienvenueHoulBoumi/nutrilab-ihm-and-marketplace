@@ -59,6 +59,8 @@ const ArticleDetails: React.FC<ArticleDetailsProps> = ({ selectedArticle, setSel
                         <p><strong>Quantity:</strong> {ingredient.dosage} {ingredient.labelDosage}</p>
                     </div>
                 ))}
+                <h2 className="text-2xl font-bold mt-4">Preparation</h2>
+                <p className="mb-2">{selectedArticle.preparation}</p>
             </div>
         </div>
     );

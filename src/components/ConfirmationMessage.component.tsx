@@ -33,6 +33,7 @@ const ConfirmationMessage: React.FC<ConfirmationMessageProps> = ({ onRestart, on
             <p><strong>Name:</strong> {articleData.name}</p>
             <p><strong>Description:</strong> {articleData.description}</p>
             <p><strong>Area:</strong> {articleData.area}</p>
+            <p><strong>Preparation:</strong> {articleData.preparation}</p>
           </div>
         )}
         {ingredients.length > 0 && (
