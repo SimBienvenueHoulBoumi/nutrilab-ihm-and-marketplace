@@ -34,7 +34,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
     try {
       await deleteFavorite(favoriteId);
       toast("Favorite deleted successfully", { type: "success" });
-      fetchFavorites(); 
+      fetchFavorites();
     } catch (error) {
       toast("Error deleting favorite", { type: "error" });
     }
@@ -53,7 +53,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
         <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
           <h2 className="text-3xl font-bold text-gray-900">Favorites</h2>
           <ul className="mt-4 space-y-2">
-            {favorites.length > 0 &&
+            {favorites.length > 0 ? (
               favorites.map((favorite) => (
                 <li
                   key={favorite.id}
@@ -77,7 +77,10 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
                     </button>
                   </div>
                 </li>
-              ))}
+              ))
+            ) : (
+              <div className="text-gray-900">No favorites created</div>
+            )}
           </ul>
         </div>
       )}
