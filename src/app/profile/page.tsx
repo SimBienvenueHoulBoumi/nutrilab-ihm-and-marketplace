@@ -279,7 +279,7 @@ function Profile() {
                           key={article.id}
                           className="flex items-center justify-between border-b border-gray-300 py-2"
                         >
-                          <h3 className="text-lg font-semibold">
+                          <h3 className="text-sm font-semibold">
                             {article.name}
                           </h3>
                           <div className="flex justify-end space-x-2">

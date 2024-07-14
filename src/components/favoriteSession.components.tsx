@@ -52,7 +52,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = () => {
       ) : favorites.length === 0 ? null : (
         <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
           <h2 className="text-3xl font-bold text-gray-900">Favorites</h2>
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-2 space-y-2">
             {favorites.length > 0 ? (
               favorites.map((favorite) => (
                 <li

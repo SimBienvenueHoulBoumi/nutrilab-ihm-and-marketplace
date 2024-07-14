@@ -30,6 +30,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [localUserId, setLocalUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +38,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
         const fetchedArticle = await getArticleById(articleId);
         const fetchedIngredients = await getIngredients(articleId);
         const userId = await getLocalUserId();
+        setLocalUserId(userId);
 
         let fetchedFavorites = await getFavorites();
         if (!Array.isArray(fetchedFavorites)) {
@@ -69,10 +71,11 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
   }
 
   const handleAddToFavorite = async () => {
-    if (article) {
+    if (article && localUserId) {
       try {
         const favorite = await findOneFavorite(articleId);
-        if (favorite.userId === (await getLocalUserId())) {
+
+        if (favorite && favorite.userId === localUserId) {
           toast("Article is already in favorites", { type: "info" });
         } else {
           const favoriteDto: FavoriteDto = {
@@ -87,7 +90,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
             const newFavorite: Favorite = {
               id: addedFavorite.id,
               articleId: articleId,
-              userId: await getLocalUserId(),
+              userId: localUserId,
               name: article.name,
             };
 
@@ -103,6 +106,9 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
     }
   };
 
+  const isFavorite = favorites.some((fav) => fav.articleId === articleId);
+  const isArticleOwnedByUser = article?.userId === localUserId;
+
   return (
     <div className="min-h-screen bg-gray-100">
       <ToastContainer />
@@ -111,15 +117,15 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
             <div className="px-4 py-5 sm:px-6">
               <button
-                onClick={() => handleAddToFavorite()}
+                onClick={handleAddToFavorite}
                 className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                  favorites.some((fav) => fav.articleId === articleId)
+                  isFavorite || isArticleOwnedByUser
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 }`}
-                disabled={favorites.some((fav) => fav.articleId === articleId)}
+                disabled={isFavorite || isArticleOwnedByUser}
               >
-                {favorites.some((fav) => fav.articleId === articleId)
+                {isFavorite || isArticleOwnedByUser
                   ? "Added to Favorite"
                   : "Add to Favorite"}
               </button>
@@ -165,7 +171,9 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
                   </dd>
                 </div>
                 <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500">Preparation</dt>
+                  <dt className="text-sm font-medium text-gray-500">
+                    Preparation
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900">
                     {article?.preparation}
                   </dd>
