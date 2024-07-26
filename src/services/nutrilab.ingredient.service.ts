@@ -53,7 +53,7 @@ export async function createIngredient(
       body: JSON.stringify(ingredient),
     });
 
-    if ((await response.status) !== 201) {
+    if (response.status !== 201) {
       const errorText = await response.text();
       throw new Error(`Network response was not ok: ${errorText}`);
     }
@@ -69,39 +69,27 @@ export async function updateIngredient(
   articleId: string,
   ingredientId: string,
   ingredient: IngredientDto
-): Promise<Ingredient> {
+): Promise<string> {
   const token = cookies().get("token")?.value || "";
 
-  try {
-    const response = await fetch(
-      `${url}/ingredients/${articleId}/${ingredientId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(ingredient),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Network response was not ok: ${response.statusText}`);
+  const response = await fetch(
+    `${url}/ingredients/${articleId}/${ingredientId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(ingredient),
     }
+  );
 
-    const data = await response.json();
-
-    return data as Ingredient;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(
-        `An error occurred while updating the ingredient: ${error.message}`
-      );
-    } else {
-      throw new Error(
-        "An unknown error occurred while updating the ingredient."
-      );
-    }
+  const contentType = response.headers.get("content-type");
+  if (contentType) {
+    return await response.text();
+  } else {
+    const text = await response.text();
+    throw new Error(text);
   }
 }
 
@@ -111,21 +99,10 @@ export async function deleteIngredient(
 ): Promise<void> {
   const token = cookies().get("token")?.value || "";
 
-  try {
-    const response = await fetch(
-      `${url}/ingredients/${articleId}/${ingredientId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
-  } catch (error: any) {
-    throw new Error(`Failed to delete ingredient: ${error.message}`);
-  }
+  await fetch(`${url}/ingredients/${articleId}/${ingredientId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }

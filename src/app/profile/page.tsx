@@ -72,7 +72,7 @@ function Profile() {
   const fetchLocalUserId = async () => {
     try {
       const userId = await getLocalUserId();
-      setLocalUserId(userId); 
+      setLocalUserId(userId);
     } catch (error) {
       console.error("Error fetching local user ID:", error);
     }
@@ -285,17 +285,25 @@ function Profile() {
                           <div className="flex justify-end space-x-2">
                             <button
                               onClick={() => handleDeleteArticle(article.id)}
-                              className="text-red-600 text-xs"
+                              className="bg-red-500 hover:bg-red-200 text-white text-xs px-2 py-1 rounded"
                             >
                               Delete
                             </button>
                             <button
-                              className="text-green-600 text-xs"
+                              className="bg-green-500 hover:bg-green-200 text-white text-xs px-2 py-1 rounded"
                               onClick={() =>
                                 (window.location.href = `/marketplace/article-details/${article.id}`)
                               }
                             >
                               Details
+                            </button>
+                            <button
+                              className="bg-blue-500 hover:bg-green-200 text-white text-xs px-2 py-1 rounded"
+                              onClick={() =>
+                                (window.location.href = `/marketplace/update-article/${article.id}`)
+                              }
+                            >
+                              Update
                             </button>
                           </div>
                         </li>

@@ -6,9 +6,7 @@ import { ClipLoader } from "react-spinners";
 import ArticleDetails from "@/components/articleDetails.components";
 import ArticlesGrid from "@/components/articleFilter.components";
 import Article from "@/interfaces/article.interface";
-import { FavoriteDto } from "@/interfaces/favorite.interface"; // Import de FavoriteDto
 import { getArticles } from "@/services/nutrilab.article.service";
-import { addFavorite, deleteFavorite, findOneFavorite } from "@/services/nutrilab.favorite.service";
 
 const continents = [
   { name: "Africa" },
