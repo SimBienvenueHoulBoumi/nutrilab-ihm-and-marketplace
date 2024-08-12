@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   useForm,
   SubmitHandler,
@@ -8,32 +8,15 @@ import {
   useFieldArray,
 } from "react-hook-form";
 import { ClipLoader } from "react-spinners";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import StepIndicator from "@/components/StepIndicator.components";
 import ArticleForm from "@/components/ArticleForm.components";
 import ConfirmationMessage from "@/components/ConfirmationMessage.component";
 import IngredientForm from "@/components/IngredientsForm.component";
-
 import { ICreateMealForm } from "@/interfaces/meal.interface";
-import {
-  createArticle,
-  getArticles,
-} from "@/services/nutrilab.article.service";
+import { createArticle, getArticles } from "@/services/nutrilab.article.service";
 import { createIngredient } from "@/services/nutrilab.ingredient.service";
-import { IngredientDto } from "@/interfaces/ingredient.interface";
-
-interface ArticleResponse {
-  id: string;
-  name: string;
-  description: string;
-  area: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 const CreateMeal: React.FC = () => {
   const methods = useForm<ICreateMealForm>({
@@ -41,11 +24,12 @@ const CreateMeal: React.FC = () => {
       name: "",
       description: "",
       area: "",
+      preparation: "",
       ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "" }],
     },
   });
 
-  const { control, reset } = methods;
+  const { control, reset, getValues, setValue } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "ingredients",
@@ -55,20 +39,44 @@ const CreateMeal: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
   const [confirmed, setConfirmed] = useState(false);
+  const [articleData, setArticleData] = useState<ICreateMealForm>({
+    name: '',
+    description: '',
+    area: '',
+    preparation: '',
+    ingredients: [],
+  });
 
-  const [articleData, setArticleData] = useState<ICreateMealForm | null>(null);
-  const [ingredientsData, setIngredientsData] = useState<IngredientDto[]>([]);
-
-  const onSubmitArticleForm: SubmitHandler<ICreateMealForm> = async (data) => {
-    setArticleData(data);
+  const onSubmitArticleForm: SubmitHandler<ICreateMealForm> = (data) => {
+    setArticleData({
+      name: data.name || '',
+      description: data.description || '',
+      area: data.area || '',
+      preparation: data.preparation || '',
+      ingredients: data.ingredients || [],
+    });
     setStep(2);
   };
 
-  const onSubmitIngredientForm: SubmitHandler<ICreateMealForm> = async (
-    data
-  ) => {
-    setIngredientsData(data.ingredients);
+  const onSubmitIngredientForm: SubmitHandler<ICreateMealForm> = (data) => {
+    setArticleData({
+      ...articleData,
+      ingredients: data.ingredients || [],
+    });
     setStep(3);
+  };
+
+  const handleAddIngredient = () => {
+    append({ name: "", picture: "", labelDosage: "", dosage: "" });
+  };
+
+  const handleRemoveIngredient = (index: number) => {
+    remove(index);
+  };
+
+  const handleBackToArticle = () => {
+    setArticleData(getValues());
+    setStep(1);
   };
 
   const restartProcess = () => {
@@ -76,25 +84,18 @@ const CreateMeal: React.FC = () => {
       name: "",
       description: "",
       area: "",
-      ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "", }],
+      preparation: "",
+      ingredients: [{ name: "", picture: "", labelDosage: "", dosage: "" }],
     });
     setStep(1);
     setConfirmed(false);
-    setArticleData(null);
-    setIngredientsData([]);
-  };
-
-  const handleAddIngredient = () => {
-    append({
-      name: "",
-      picture: "",
-      labelDosage: "",
-      dosage: "",
+    setArticleData({
+      name: '',
+      description: '',
+      area: '',
+      preparation: '',
+      ingredients: [],
     });
-  };
-
-  const handleRemoveIngredient = (index: number) => {
-    remove(index);
   };
 
   const handleConfirm = async () => {
@@ -102,27 +103,20 @@ const CreateMeal: React.FC = () => {
     setError(null);
 
     try {
-      await createArticle({
-        name: articleData!.name,
-        description: articleData!.description,
-        area: articleData!.area,
-        preparation: articleData!.preparation
-      });
+      await createArticle(articleData);
 
-      const newArticle = (await getArticles()).filter(
-        (article) => article.name === articleData!.name
-      )[0];
+      const newArticle = (await getArticles()).find(
+        (article) => article.name === articleData.name
+      );
+
+      if (!newArticle) {
+        throw new Error("Article not found");
+      }
 
       const articleId = newArticle.id;
 
-      toast("article created successfully...", {
-        type: "success",
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-
       await Promise.all(
-        ingredientsData.map(async (ingredient) => {
+        articleData.ingredients.map(async (ingredient) => {
           try {
             await createIngredient(
               {
@@ -136,24 +130,16 @@ const CreateMeal: React.FC = () => {
           } catch (error) {
             throw new Error(`Failed to create ingredient ${ingredient.name}`);
           }
-          toast("ingredients created successfully...", {
-            type: "success",
-          });
         })
       );
-      setConfirmed(true);
-      setStep(3);
 
+      toast.success("Article and ingredients created successfully");
+      setConfirmed(true);
       setTimeout(() => {
-        toast("article created successfully", {
-          type: "success",
-        });
         window.location.href = "/marketplace";
       }, 2000);
     } catch (error) {
-      toast("An error occurred while creating the article or ingredients.", {
-        type: "error",
-      });
+      toast.error("An error occurred while creating the article or ingredients.");
     } finally {
       setLoading(false);
     }
@@ -168,19 +154,28 @@ const CreateMeal: React.FC = () => {
           <FormProvider {...methods}>
             {step === 1 && <ArticleForm onSubmit={onSubmitArticleForm} />}
             {step === 2 && (
-              <IngredientForm
-                onSubmit={onSubmitIngredientForm}
-                onAddIngredient={handleAddIngredient}
-                onRemoveIngredient={handleRemoveIngredient}
-                fields={fields}
-              />
+              <>
+                <IngredientForm
+                  onSubmit={onSubmitIngredientForm}
+                  onAddIngredient={handleAddIngredient}
+                  onRemoveIngredient={handleRemoveIngredient}
+                  fields={fields}
+                />
+                <button
+                  type="button"
+                  className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 mt-4"
+                  onClick={handleBackToArticle}
+                >
+                  Back to Article
+                </button>
+              </>
             )}
             {step === 3 && (
               <ConfirmationMessage
                 onRestart={restartProcess}
                 onConfirm={handleConfirm}
                 articleData={articleData}
-                ingredientsData={ingredientsData}
+                ingredientsData={articleData.ingredients || []}
               />
             )}
           </FormProvider>

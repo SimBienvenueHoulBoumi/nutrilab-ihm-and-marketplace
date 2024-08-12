@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-
 import {
   useFormContext,
   SubmitHandler,
@@ -9,10 +8,8 @@ import {
 } from "react-hook-form";
 import { ICreateMealForm } from "../interfaces/meal.interface";
 import { FieldArrayWithId } from "react-hook-form";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import CustomInput from "../components/myInput.components";
 
 interface IngredientFormProps {
@@ -87,8 +84,13 @@ const IngredientForm: React.FC<IngredientFormProps> = ({
             />
             <button
               type="button"
-              className="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
-              onClick={() => onRemoveIngredient(index)}
+              className={`text-white py-1 px-2 rounded focus:outline-none focus:ring-2 ${
+                fields.length <= 1
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700 focus:ring-red-600"
+              }`}
+              onClick={() => fields.length > 1 && onRemoveIngredient(index)}
+              disabled={fields.length <= 1} // Disable button if there is only one ingredient
             >
               Remove
             </button>
