@@ -4,8 +4,14 @@ import React from "react";
 import MyGlobalFooter from "@/components/myGlobalFooter.components";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion"; // Import framer-motion
 
 import { CONTINENTS, DISCOVERIES } from "@/constantes/local";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export default function Page() {
   return (
@@ -58,31 +64,36 @@ export default function Page() {
           <h2 className="text-2xl font-bold text-gray-900">CONTINENTS</h2>
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {CONTINENTS.map((continent, index) => (
-              <Link
+              <motion.div
                 key={index}
-                href={`/marketplace?continent=${continent.name}`}
+                variants={fadeInUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.2, delay: index * 0.1 }}
               >
-                <div
-                  className="block h-full rounded-xl border border-gray-300 p-4 shadow-xl transition hover:border-[#5e6369] hover:shadow-[#5e6369]/10 bg-white"
-                  onClick={() => {
-                    localStorage.setItem("selectedContinent", continent.name);
-                  }}
-                >
-                  <Image
-                    src={continent.image}
-                    alt={continent.name}
-                    width="250"
-                    height="150"
-                    className="mb-4 rounded-md w-full h-40 object-cover aspect-[1/1] block"
-                  />
-                  <h2 className="mt-4 text-xl font-bold text-gray-900">
-                    {continent.name}
-                  </h2>
-                  <p className="mt-2 text-sm text-gray-600">
-                    {continent.description}
-                  </p>
-                </div>
-              </Link>
+                <Link href={`/marketplace?continent=${continent.name}`}>
+                  <div
+                    className="block h-full rounded-xl border border-gray-300 p-4 shadow-xl transition hover:border-[#5e6369] hover:shadow-[#5e6369]/10 bg-white"
+                    onClick={() => {
+                      localStorage.setItem("selectedContinent", continent.name);
+                    }}
+                  >
+                    <Image
+                      src={continent.image}
+                      alt={continent.name}
+                      width="250"
+                      height="150"
+                      className="mb-4 rounded-md w-full h-40 object-cover aspect-[1/1] block"
+                    />
+                    <h2 className="mt-4 text-xl font-bold text-gray-900">
+                      {continent.name}
+                    </h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                      {continent.description}
+                    </p>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
