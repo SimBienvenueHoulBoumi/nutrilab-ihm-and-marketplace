@@ -19,7 +19,7 @@ export default function Page() {
       <section className="min-h-screen flex flex-col justify-between">
         {/* Hero Section */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 px-6 lg:px-8 py-12">
-          <div className="flex flex-col justify-center space-y-4 p-6 rounded-lg bg-white shadow-md shadow-[#5e6369]">
+          <div className="flex flex-col justify-center space-y-4 p-4 rounded-lg bg-white shadow-md shadow-[#5e6369]">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-green-200 px-3 py-1 text-sm text-green-800">
                 Recipe of the day
@@ -53,8 +53,8 @@ export default function Page() {
           <Image
             src="https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg"
             alt="Dish"
-            width="400"
-            height="400"
+            width="500"
+            height="500"
             className="mx-auto p-2 rounded-xl object-cover aspect-[7/5] block"
           />
         </div>
@@ -62,7 +62,7 @@ export default function Page() {
         {/* Continent Showcase */}
         <div className="w-full mx-auto max-w-screen-xl px-4 py-6 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900">CONTINENTS</h2>
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {CONTINENTS.map((continent, index) => (
               <motion.div
                 key={index}

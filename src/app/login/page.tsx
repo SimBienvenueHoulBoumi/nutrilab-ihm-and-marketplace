@@ -89,13 +89,13 @@ function Login() {
               </div>
             </Link>
           </div>
-          <div className="text-center">
+          {/* <div className="text-center">
             <Link href="/verify-email">
               <div className="italic text-sm hover:underline hover:text-[#462084]">
                 Forgot your password?{" "}
               </div>
             </Link>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>

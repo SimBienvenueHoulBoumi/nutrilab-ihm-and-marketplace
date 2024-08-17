@@ -28,7 +28,7 @@ export default function MyHeader() {
     }
 
     return (
-        <div className="flex w-full justify-between bg-[#87cacc] py-2 px-1">
+        <div className="flex w-full justify-between bg-[#87cacc] py-2 px-10">
             <div className="uppercase flex items-center space-x-2">
                 <Image src="/images/logo.png" alt="Nutrilab" width={30} height={30} />
                 <span>Nutrilab</span>
