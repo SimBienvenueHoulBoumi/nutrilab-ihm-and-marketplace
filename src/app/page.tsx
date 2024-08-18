@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { CONTINENTS, DISCOVERIES } from "@/constantes/local";
 
+import Fonctionning from "@/components/Fonctionning.components";
+
 export default function Page() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -15,6 +17,7 @@ export default function Page() {
     "https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg",
     "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
     "https://www.themealdb.com/images/media/meals/qrqywr1503066605.jpg",
+    "https://www.themealdb.com/images/media/meals/1529446352.jpg",
   ];
 
   useEffect(() => {
@@ -76,8 +79,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Carousel d'images */}
-          <div className="relative w-full max-w-lg mx-auto h-[320px]">
+          <div className="relative w-full max-w-lg mx-auto h-[300px]">
             <AnimatePresence>
               <motion.div
                 key={currentImageIndex}
@@ -90,7 +92,7 @@ export default function Page() {
                 <Image
                   src={images[currentImageIndex]}
                   alt="Dish"
-                  width="500"
+                  width="465"
                   height="500"
                   className="mx-auto p-2 rounded-xl object-cover aspect-[7/5] block"
                 />
@@ -99,15 +101,17 @@ export default function Page() {
 
             <button
               onClick={handlePrevious}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 w-10 h-10 text-xs bg-white rounded-full shadow-md hover:bg-gray-100 flex items-center justify-center"
+              aria-label="Previous"
             >
-              ←
+              &lt;
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-md hover:bg-gray-100 flex items-center justify-center"
+              aria-label="Next"
             >
-              →
+              &gt;
             </button>
           </div>
         </div>
@@ -165,7 +169,7 @@ export default function Page() {
             create a new recipe
           </Link>
         </div>
-
+        <Fonctionning />
         <div className="w-full mx-auto max-w-screen-xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-lg text-center">
             <h2 className="text-3xl font-bold text-black sm:text-4xl">

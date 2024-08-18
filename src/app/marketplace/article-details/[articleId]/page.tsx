@@ -4,19 +4,19 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { getArticleById } from "@/services/nutrilab.article.service";
 import { getIngredients } from "@/services/nutrilab.ingredient.service";
-import Article from "@/interfaces/article.interface";
-import { Ingredient } from "@/interfaces/ingredient.interface";
 import {
   addFavorite,
   findOneFavorite,
   getFavorites,
 } from "@/services/nutrilab.favorite.service";
-import Favorite, { FavoriteDto } from "@/interfaces/favorite.interface";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
 
 import { getLocalUserId } from "@/services/auth.service";
+import Article from "@/interfaces/article.interface";
+import { Ingredient } from "@/interfaces/ingredient.interface";
+import Favorite, { FavoriteDto } from "@/interfaces/favorite.interface";
 
 interface ArticleDetailProps {
   params: {
@@ -115,6 +115,17 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+            {/* Image Section */}
+            <div className="flex justify-center items-center p-4">
+              <Image
+                src="/images/salade-de-fruits.jpg"
+                alt="Product Image"
+                className="object-cover rounded"
+                width={500}
+                height={500}
+              />
+            </div>
+            {/* Article Details */}
             <div className="px-4 py-5 sm:px-6">
               <button
                 onClick={handleAddToFavorite}
@@ -130,15 +141,9 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
                   : "Add to Favorite"}
               </button>
               <h1 className="text-2xl font-bold text-gray-900 mt-4">
-                Article Details
+                {article?.name}
               </h1>
               <dl className="mt-4 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Title</dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {article?.name}
-                  </dd>
-                </div>
                 <div className="sm:col-span-2">
                   <dt className="text-sm font-medium text-gray-500">
                     Description
@@ -179,15 +184,6 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
                   </dd>
                 </div>
               </dl>
-            </div>
-            <div className="hidden md:block">
-              <Image
-                src="/images/salade-de-fruits.jpg"
-                alt="Product"
-                className="w-full h-full max-h-80 p-2 object-cover"
-                height={300}
-                width={300}
-              />
             </div>
           </div>
         </div>
