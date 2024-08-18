@@ -1,24 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MyGlobalFooter from "@/components/myGlobalFooter.components";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion"; // Import framer-motion
+import { motion, AnimatePresence } from "framer-motion";
 
 import { CONTINENTS, DISCOVERIES } from "@/constantes/local";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
 export default function Page() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [
+    "https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg",
+    "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
+    "https://www.themealdb.com/images/media/meals/qrqywr1503066605.jpg",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const handlePrevious = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   return (
     <>
       <section className="min-h-screen flex flex-col justify-between">
         {/* Hero Section */}
-        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 px-6 lg:px-8 py-12">
+        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-6 px-3 lg:px-4 py-6">
           <div className="flex flex-col justify-center space-y-4 p-4 rounded-lg bg-white shadow-md shadow-[#5e6369]">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-green-200 px-3 py-1 text-sm text-green-800">
@@ -50,45 +75,72 @@ export default function Page() {
               </Link>
             </div>
           </div>
-          <Image
-            src="https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg"
-            alt="Dish"
-            width="500"
-            height="500"
-            className="mx-auto p-2 rounded-xl object-cover aspect-[7/5] block"
-          />
+
+          {/* Carousel d'images */}
+          <div className="relative w-full max-w-lg mx-auto h-[320px]">
+            <AnimatePresence>
+              <motion.div
+                key={currentImageIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 1.2, ease: "easeInOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={images[currentImageIndex]}
+                  alt="Dish"
+                  width="500"
+                  height="500"
+                  className="mx-auto p-2 rounded-xl object-cover aspect-[7/5] block"
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            <button
+              onClick={handlePrevious}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+            >
+              ←
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+            >
+              →
+            </button>
+          </div>
         </div>
 
-        {/* Continent Showcase */}
-        <div className="w-full mx-auto max-w-screen-xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900">CONTINENTS</h2>
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {CONTINENTS.map((continent, index) => (
               <motion.div
                 key={index}
-                variants={fadeInUp}
-                initial="hidden"
-                animate="visible"
-                transition={{ duration: 0.2, delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <Link href={`/marketplace?continent=${continent.name}`}>
                   <div
-                    className="block h-full rounded-xl border border-gray-300 p-4 shadow-xl transition hover:border-[#5e6369] hover:shadow-[#5e6369]/10 bg-white"
+                    className="block h-full rounded-xl border border-gray-300 p-4 shadow-xl transition hover:border-[#2e633c] hover:shadow-[#5e6369]/10 bg-white"
                     onClick={() => {
                       localStorage.setItem("selectedContinent", continent.name);
                     }}
                   >
+                    <h2 className="mb-2 bg-gray-100 text-green-600 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-900 dark:text-gray-300 inline-block">
+                      {continent.name}
+                    </h2>
+
                     <Image
                       src={continent.image}
                       alt={continent.name}
                       width="250"
                       height="150"
-                      className="mb-4 rounded-md w-full h-40 object-cover aspect-[1/1] block"
+                      className="mb-2 rounded-md w-full h-40 object-cover aspect-[1/1] block"
                     />
-                    <h2 className="mt-4 text-xl font-bold text-gray-900">
-                      {continent.name}
-                    </h2>
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className="text-sm text-black">
                       {continent.description}
                     </p>
                   </div>
@@ -129,7 +181,7 @@ export default function Page() {
             {DISCOVERIES.map((item, index) => (
               <div
                 key={index}
-                className="block rounded-xl border border-gray-300 p-8 shadow-sm transition  hover:shadow-blue-500/10 bg-white"
+                className="block border border-gray-300 p-8 shadow-sm transition hover:shadow-blue-500/10 bg-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +191,7 @@ export default function Page() {
                   stroke="currentColor"
                   strokeWidth="2"
                 >
-                  <path d={`M12 14l9-5-9-5-9 5 9 5z`} />
+                  <path d={`M12 14l9-5-9-5-9 5z`} />
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
