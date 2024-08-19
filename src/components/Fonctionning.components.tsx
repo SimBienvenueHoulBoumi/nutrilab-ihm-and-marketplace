@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Fonctionning = () => {
   return (
@@ -17,25 +18,34 @@ const Fonctionning = () => {
               should be cooked to properly represent the basic recipe.
             </li>
             <li>
-              Share your recipe with other users by creating a marketplace.
+              Manage your recipe by adding ingredients and steps to make it
+              easier for users to understand.
+            </li>
+            <li>
+              You can also save other peoplet&apos;s recipes so you can refer to
+              them later without searching for them again.
             </li>
           </ol>
           <p className="mt-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-            non enim dignissim, tincidunt neque id, finibus felis. Quisque
-            placerat, ex non consectetur faucibus, velit velit tristique velit,
-            ac fermentum nunc eros sed velit. Sed vel faucibus felis, in rutrum
-            ipsum.
+            Once your recipe is created, it will be available to all users who
+            can view it. Let&apos;s share our culture so that it doesn&apos;t
+            disappear with us. Let the world enjoy it with us.
           </p>
+          <Link
+            href="/marketplace"
+            className="mt-6 inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-medium transition hover:bg-green-200"
+          >
+            Join us for a fantastic culinary adventure
+          </Link>
         </div>
       </div>
 
       {/* Section Image */}
       <div className="lg:w-1/2">
         <Image
-          src="/images/salade-de-fruits.jpg"
-          width={600}
-          height={400}
+          src="https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
+          width="450"
+          height="350"
           alt="Salade de fruits"
           className="rounded-lg shadow-lg"
         />

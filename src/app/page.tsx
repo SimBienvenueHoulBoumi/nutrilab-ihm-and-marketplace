@@ -14,10 +14,11 @@ export default function Page() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-    "https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg",
     "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
     "https://www.themealdb.com/images/media/meals/qrqywr1503066605.jpg",
+    "https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg",
     "https://www.themealdb.com/images/media/meals/1529446352.jpg",
+    "https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg",    
   ];
 
   useEffect(() => {
