@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "nutrilab",
   description: "nutrilab website interface",
   icons: {
-    icon: ["/favicon.ico"],
+    icon: ["./favicon.ico"],
   },
 };
 
