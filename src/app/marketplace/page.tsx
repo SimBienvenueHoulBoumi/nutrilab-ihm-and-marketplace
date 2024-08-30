@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -7,39 +7,32 @@ import ArticleDetails from "@/components/articleDetails.components";
 import ArticlesGrid from "@/components/articleFilter.components";
 import Article from "@/interfaces/article.interface";
 import { getArticles } from "@/services/nutrilab.article.service";
-
-const continents = [
-  { name: "Africa" },
-  { name: "Asia" },
-  { name: "Europe" },
-  { name: "North America" },
-  { name: "South America" },
-  { name: "Australia" },
-  { name: "Antarctica" },
-];
+import CustomSelect from "@/components/customSelect.components";
+import { useForm } from "react-hook-form";
+import { CONTINENT_OPTIONS } from "@/constantes/continentsOptions";
 
 interface ProductListProps {}
 
 const ProductList: React.FC<ProductListProps> = ({}) => {
-  const [selectedContinent, setSelectedContinent] = useState<string | null>(
-    null
-  );
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { register, watch, setValue } = useForm();
+  const selectedContinent = watch("continent");
 
   useEffect(() => {
-    const defaultContinent = localStorage.getItem("selectedContinent");
-    const continentExists = continents.some(
-      (continent) => continent.name === defaultContinent
-    );
-
-    if (defaultContinent && continentExists) {
-      setSelectedContinent(defaultContinent);
-    } else {
-      setSelectedContinent(null);
-    }
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const response = await getArticles();
+        setArticles(response);
+      } catch (error) {
+        console.error("Failed to fetch articles:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchArticles();
   }, []);
@@ -49,18 +42,6 @@ const ProductList: React.FC<ProductListProps> = ({}) => {
       localStorage.setItem("selectedContinent", selectedContinent);
     }
   }, [selectedContinent]);
-
-  const fetchArticles = async () => {
-    try {
-      setLoading(true);
-      const response = await getArticles();
-      setArticles(response);
-    } catch (error) {
-      console.error("Failed to fetch articles:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredArticles = selectedContinent
     ? articles.filter((article) => article.area === selectedContinent)
@@ -73,21 +54,15 @@ const ProductList: React.FC<ProductListProps> = ({}) => {
   return (
     <div className="min-h-screen relative">
       <div className="flex flex-col space-y-4 px-4 sm:px-6 lg:px-8 py-2 sm:py-4 lg:py-6">
-        <div className="w-full">
-          <div className="flex flex-wrap gap-2 text-black">
-            {continents.map((continent, index) => (
-              <div
-                key={index}
-                className={`block hover:cursor-pointer rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 hover:text-gray-700 ${
-                  selectedContinent === continent.name
-                    ? "bg-gray-100 text-gray-700"
-                    : ""
-                }`}
-                onClick={() => setSelectedContinent(continent.name)}
-              >
-                {continent.name}
-              </div>
-            ))}
+        <div className="w-full mx-auto">
+          <div className="w-64">
+            <CustomSelect
+              label="Select a continent"
+              options={CONTINENT_OPTIONS}
+              register={register}
+              name="continent"
+              required={false}
+            />
           </div>
           <Link
             href="/create-meal"

@@ -31,6 +31,9 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [localUserId, setLocalUserId] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState<"description" | "reviews">(
+    "description"
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,14 +43,10 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
         const userId = await getLocalUserId();
         setLocalUserId(userId);
 
-        let fetchedFavorites = await getFavorites();
-        if (!Array.isArray(fetchedFavorites)) {
-          fetchedFavorites = [];
-        }
-
-        const filteredFavorites = fetchedFavorites.filter(
-          (favorite: Favorite) => favorite.userId === userId
-        );
+        const fetchedFavorites = await getFavorites();
+        const filteredFavorites = Array.isArray(fetchedFavorites)
+          ? fetchedFavorites.filter((favorite) => favorite.userId === userId)
+          : [];
 
         setArticle(fetchedArticle);
         setIngredients(fetchedIngredients);
@@ -62,6 +61,39 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
     fetchData();
   }, [articleId]);
 
+  const handleAddToFavorite = async () => {
+    if (article && localUserId) {
+      try {
+        const existingFavorite = await findOneFavorite(articleId);
+
+        if (existingFavorite && existingFavorite.userId === localUserId) {
+          toast.info("Article is already in favorites");
+        } else {
+          const favoriteDto: FavoriteDto = { name: article.name };
+          await addFavorite(articleId, favoriteDto);
+          toast.success("Article added to favorites");
+
+          const addedFavorite = await findOneFavorite(articleId);
+          if (addedFavorite) {
+            setFavorites([
+              ...favorites,
+              { ...addedFavorite, userId: localUserId },
+            ]);
+            window.location.reload();
+          } else {
+            console.error("Failed to retrieve added favorite");
+          }
+        }
+      } catch (error) {
+        console.error("Error adding article to favorites:", error);
+        toast.error("Error adding article to favorites");
+      }
+    }
+  };
+
+  const isFavorite = favorites.some((fav) => fav.articleId === articleId);
+  const isArticleOwnedByUser = article?.userId === localUserId;
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -70,121 +102,89 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
     );
   }
 
-  const handleAddToFavorite = async () => {
-    if (article && localUserId) {
-      try {
-        const favorite = await findOneFavorite(articleId);
-
-        if (favorite && favorite.userId === localUserId) {
-          toast("Article is already in favorites", { type: "info" });
-        } else {
-          const favoriteDto: FavoriteDto = {
-            name: article.name,
-          };
-
-          await addFavorite(articleId, favoriteDto);
-          toast("Article added to favorites", { type: "success" });
-
-          const addedFavorite = await findOneFavorite(articleId);
-          if (addedFavorite) {
-            const newFavorite: Favorite = {
-              id: addedFavorite.id,
-              articleId: articleId,
-              userId: localUserId,
-              name: article.name,
-            };
-
-            setFavorites([...favorites, newFavorite]);
-          } else {
-            console.error("Failed to retrieve added favorite");
-          }
-        }
-      } catch (error) {
-        console.error("Error adding article to favorites:", error);
-        toast("Error adding article to favorites", { type: "error" });
-      }
-    }
-  };
-
-  const isFavorite = favorites.some((fav) => fav.articleId === articleId);
-  const isArticleOwnedByUser = article?.userId === localUserId;
-
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="font-sans p-8 tracking-wide max-lg:max-w-2xl mx-auto">
       <ToastContainer />
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
-            {/* Image Section */}
-            <div className="flex justify-center items-center p-4">
-              <Image
-                src="/images/salade-de-fruits.jpg"
-                alt="Product Image"
-                className="object-cover rounded"
-                width={500}
-                height={500}
-              />
-            </div>
-            {/* Article Details */}
-            <div className="px-4 py-5 sm:px-6">
+      <div>
+        <h2 className="text-2xl font-extrabold text-gray-800">
+          {article?.name}
+        </h2>
+      </div>
+
+      <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-10 mt-6">
+        <Image
+          src="/images/salade-de-fruits.jpg"
+          alt="Product Image"
+          className="w-full max-h-full object-contain object-top"
+          width={500}
+          height={500}
+        />
+
+        <div>
+          <ul className="flex border-b items-center">
+            <li
+              className={`${
+                selectedTab === "description"
+                  ? "text-gray-800 font-bold border-b-2 border-gray-800 bg-gray-100"
+                  : "text-gray-600 font-bold hover:bg-gray-100"
+              } py-3 px-8 cursor-pointer transition-all`}
+              onClick={() => setSelectedTab("description")}
+            >
+              Description
+            </li>
+            <li
+              className={`${
+                selectedTab === "reviews"
+                  ? "text-gray-800 font-bold border-b-2 border-gray-800 bg-gray-100"
+                  : "text-gray-600 font-bold hover:bg-gray-100"
+              } py-3 px-8 cursor-pointer transition-all`}
+              onClick={() => setSelectedTab("reviews")}
+            >
+              Reviews
+            </li>
+            <li className="ml-auto">
               <button
                 onClick={handleAddToFavorite}
-                className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
+                className={`px-6 py-3 rounded-lg font-semibold text-white transition-all ${
                   isFavorite || isArticleOwnedByUser
                     ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    : "bg-green-500 hover:bg-green-600"
                 }`}
                 disabled={isFavorite || isArticleOwnedByUser}
               >
                 {isFavorite || isArticleOwnedByUser
-                  ? "Added to Favorite"
-                  : "Add to Favorite"}
+                  ? isArticleOwnedByUser
+                    ? "Owned by You"
+                    : "In Favorites"
+                  : "Add to Favorites"}
               </button>
-              <h1 className="text-2xl font-bold text-gray-900 mt-4">
-                {article?.name}
-              </h1>
-              <dl className="mt-4 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Description
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {article?.description}
-                  </dd>
-                </div>
-                <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500">Area</dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {article?.area}
-                  </dd>
-                </div>
-                <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Ingredients
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {ingredients.length > 0 ? (
-                      ingredients.map((ingredient, index) => (
-                        <div key={index} className="mb-1">
-                          <strong>{ingredient.name}:</strong>{" "}
+            </li>
+          </ul>
+
+          <div className="text-sm text-gray-600 mt-4">
+            {selectedTab === "description" ? (
+              <div className="space-y-2 list-disc mt-4 text-sm text-gray-600">
+                {ingredients.length > 0 ? (
+                  ingredients.map((ingredient, index) => (
+                    <div key={index} className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <strong>{ingredient.name} :</strong>
+                        <span>
                           {ingredient.dosage} {ingredient.labelDosage}
-                        </div>
-                      ))
-                    ) : (
-                      <p>No ingredients found for this article.</p>
-                    )}
-                  </dd>
-                </div>
-                <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Preparation
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {article?.preparation}
-                  </dd>
-                </div>
-              </dl>
-            </div>
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500">
+                        {article?.description}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No ingredients found for this article.</p>
+                )}
+              </div>
+            ) : (
+              <div>{article?.preparation}</div>
+            )}
           </div>
         </div>
       </div>

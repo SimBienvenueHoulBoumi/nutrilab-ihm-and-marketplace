@@ -7,7 +7,7 @@ import MyHeader from "@/components/myHeader.components";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "nutrilab",
+  title: "nutrilab markeplace",
   description: "nutrilab website interface",
   icons: {
     icon: ["./favicon.ico"],
