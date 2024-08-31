@@ -118,7 +118,7 @@ export default function Page() {
         </div>
 
         <div className="w-full mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900">CONTINENTS</h2>
+          <h2 className="text-2xl font-bold text-gray-900 uppercase">specialties by continent</h2>
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {CONTINENTS.map((continent, index) => (
               <motion.div

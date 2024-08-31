@@ -190,7 +190,7 @@ function Profile() {
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/3 space-y-4">
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 bg-[#21b19e] py-1 rounded-sm pl-2 uppercase">
                 User Information
               </h2>
               {userInfo ? (
@@ -211,7 +211,7 @@ function Profile() {
             </div>
 
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 bg-[#21b19e] py-1 rounded-sm pl-2 uppercase">
                 Change Password
               </h2>
               <form
@@ -263,7 +263,7 @@ function Profile() {
 
           <div className="w-full lg:w-2/3 space-y-2">
             <div className="border-1 border-solid bg-white border-gray-300 shadow-md rounded-md p-6">
-              <h2 className="text-3xl font-bold text-gray-900">Articles</h2>
+              <h2 className="text-2xl font-bold text-gray-900 bg-[#21b19e] py-1 rounded-sm pl-2 uppercase">Articles</h2>
               {articleLoading ? (
                 <ClipLoader color="#000" size={35} />
               ) : (

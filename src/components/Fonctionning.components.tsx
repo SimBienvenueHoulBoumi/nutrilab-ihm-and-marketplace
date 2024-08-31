@@ -41,14 +41,20 @@ const Fonctionning = () => {
       </div>
 
       {/* Section Image */}
-      <div className="lg:w-1/2">
-        <Image
-          src="https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
-          width="450"
-          height="350"
-          alt="Salade de fruits"
-          className="rounded-lg shadow-lg"
-        />
+      <div className="lg:w-1/2 relative flex justify-center items-center">
+        <div className="relative p-4">
+          <Image
+            src="https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
+            width="350"
+            height="150"
+            alt="Salade de fruits"
+            className="rounded-lg shadow-lg"
+          />
+          {/* Soutien de cadre en haut à gauche */}
+          <div className="absolute top-0 left-0 w-10 h-10 bg-gray-700"></div>
+          {/* Soutien de cadre en bas à droite */}
+          <div className="absolute bottom-0 right-0 w-10 h-10 bg-gray-700"></div>
+        </div>
       </div>
     </div>
   );
