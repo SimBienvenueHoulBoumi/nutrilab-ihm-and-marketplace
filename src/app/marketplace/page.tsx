@@ -64,11 +64,27 @@ const ProductList: React.FC<ProductListProps> = ({}) => {
               required={false}
             />
           </div>
-          <Link
-            href="/create-meal"
-            className="bg-blue-500 mt-2 p-2 hover:bg-blue-700 text-white font-bold rounded block w-max"
-          >
-            + add new article
+          <Link href="/create-meal">
+            <button className="relative w-36 h-10 cursor-pointer flex items-center border border-green-500 bg-green-500 rounded-lg overflow-hidden group">
+              <span className="text-white font-semibold ml-8 transition-transform duration-300 transform group-hover:translate-x-20">
+                Add Item
+              </span>
+              <span className="absolute right-0 h-full w-10 flex items-center justify-center transition-all duration-300 bg-green-500 transform group-hover:translate-x-0 group-hover:w-full">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line x1="12" x2="12" y1="5" y2="19" />
+                  <line x1="5" x2="19" y1="12" y2="12" />
+                </svg>
+              </span>
+            </button>
           </Link>
         </div>
         {loading ? (
