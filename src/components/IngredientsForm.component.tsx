@@ -28,7 +28,7 @@ const IngredientForm: React.FC<IngredientFormProps> = ({
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isValid }, // Access form validation state
   } = useFormContext<ICreateMealForm>();
 
   const onSubmitForm: SubmitHandler<ICreateMealForm> = (data) => {
@@ -106,7 +106,10 @@ const IngredientForm: React.FC<IngredientFormProps> = ({
         <div className="flex justify-end mt-4">
           <button
             type="submit"
-            className="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-opacity-50"
+            className={`bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-opacity-50 ${
+              !isValid ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={!isValid} // Disable the button if the form is invalid
           >
             Next
           </button>

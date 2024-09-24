@@ -7,7 +7,6 @@ import {
   FormProvider,
   useFieldArray,
 } from "react-hook-form";
-import { ClipLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StepIndicator from "@/components/StepIndicator.components";
@@ -179,11 +178,6 @@ const CreateMeal: React.FC = () => {
               />
             )}
           </FormProvider>
-          {loading && (
-            <div className="flex justify-center p-4">
-              <ClipLoader color="#3B82F6" size={35} />
-            </div>
-          )}
           {error && (
             <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
               {error}

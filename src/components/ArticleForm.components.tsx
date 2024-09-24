@@ -10,7 +10,7 @@ interface ArticleFormProps {
 }
 
 const ArticleForm: React.FC<ArticleFormProps> = ({ onSubmit }) => {
-  const { handleSubmit, register } = useFormContext<ICreateMealForm>();
+  const { handleSubmit, register, formState: { isValid } } = useFormContext<ICreateMealForm>(); // Access the form's validation state
 
   const onSubmitForm: SubmitHandler<ICreateMealForm> = (data) => {
     onSubmit(data);
@@ -50,7 +50,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ onSubmit }) => {
         <div className="flex justify-end mt-4">
           <button
             type="submit"
-            className="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-opacity-50"
+            className={`bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-opacity-50 ${
+              !isValid ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            disabled={!isValid}
           >
             Next
           </button>
