@@ -11,7 +11,7 @@ import {
 } from "@/services/nutrilab.favorite.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ClipLoader } from "react-spinners";
+import { ClimbingBoxLoader, ClipLoader } from "react-spinners";
 
 import { getLocalUserId } from "@/services/auth.service";
 import Article from "@/interfaces/article.interface";
@@ -94,6 +94,8 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
   const isFavorite = favorites.some((fav) => fav.articleId === articleId);
   const isArticleOwnedByUser = article?.userId === localUserId;
 
+  console.log(favorites);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -121,31 +123,32 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
         />
 
         <div>
-          <ul className="flex border-b items-center">
-            <li
-              className={`${
-                selectedTab === "description"
-                  ? "text-gray-800 font-bold border-b-2 border-gray-800 bg-gray-100"
-                  : "text-gray-600 font-bold hover:bg-gray-100"
-              } py-3 px-8 cursor-pointer transition-all`}
-              onClick={() => setSelectedTab("description")}
-            >
-              Description
-            </li>
-            <li
-              className={`${
-                selectedTab === "reviews"
-                  ? "text-gray-800 font-bold border-b-2 border-gray-800 bg-gray-100"
-                  : "text-gray-600 font-bold hover:bg-gray-100"
-              } py-3 px-8 cursor-pointer transition-all`}
-              onClick={() => setSelectedTab("reviews")}
-            >
-              Reviews
-            </li>
-            <li className="ml-auto">
+          <ul className="flex border-b justify-between items-start space-x-2 flex-col sm:flex-row">
+            <div className="flex space-x-4 m-2">
+              <li
+                className={`${
+                  selectedTab === "description"
+                    ? "text-gray-800 font-bold border-b-2 border-gray-800 bg-gray-100"
+                    : "text-gray-600 font-bold hover:bg-gray-100"
+                } py-3 px-8 cursor-pointer transition-all`}
+                onClick={() => setSelectedTab("description")}
+              >
+                Description
+              </li>
+              <li
+                className={`${
+                  selectedTab === "reviews"
+                    ? "text-gray-800 font-bold border-b-2 border-gray-800 bg-gray-100"
+                    : "text-gray-600 font-bold hover:bg-gray-100"
+                } py-3 px-8 cursor-pointer transition-all sm:my-0`}
+                onClick={() => setSelectedTab("reviews")}
+              >
+                Reviews
+              </li>
+            </div>
               <button
                 onClick={handleAddToFavorite}
-                className={`px-6 py-3 rounded-lg font-semibold text-white transition-all ${
+                className={`px-6 py-3 my-2 mx-0 rounded-lg font-semibold text-white transition-all ${
                   isFavorite || isArticleOwnedByUser
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-500 hover:bg-green-600"
@@ -154,16 +157,15 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
               >
                 {isFavorite || isArticleOwnedByUser
                   ? isArticleOwnedByUser
-                    ? "Owned by You"
+                    ? "Add Yours"
                     : "In Favorites"
-                  : "Add to Favorites"}
+                  : "Add"}
               </button>
-            </li>
           </ul>
 
           <div className="text-sm text-gray-600 mt-4">
             {selectedTab === "description" ? (
-              <div className="space-y-2 list-disc mt-4 text-sm text-gray-600">
+              <div className="space-y-2 list-disc m-2 text-sm text-gray-600">
                 {ingredients.length > 0 ? (
                   ingredients.map((ingredient, index) => (
                     <div key={index} className="flex flex-col space-y-2">
@@ -179,11 +181,11 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ params }) => {
                     </div>
                   ))
                 ) : (
-                  <p>No ingredients found for this article.</p>
+                  <p className="m-2">No ingredients found for this article.</p>
                 )}
               </div>
             ) : (
-              <div>{article?.preparation}</div>
+              <div className="m-2">{article?.preparation}</div>
             )}
           </div>
         </div>
